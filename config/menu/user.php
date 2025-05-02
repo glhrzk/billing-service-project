@@ -26,11 +26,11 @@ return [
         'submenu' => [
             [
                 'text' => 'Lihat Paket Aktif',
-                'url' => 'user.package.show',
+                'route' => 'user.package.show',
             ],
             [
                 'text' => 'Histori Paket',
-                'url' => 'user.package.history',
+                'route' => 'user.package.history',
             ],
         ],
     ],
@@ -40,11 +40,11 @@ return [
         'submenu' => [
             [
                 'text' => 'Lihat Tagihan',
-                'url' => 'user.bills.index',
+                'route' => 'user.bill.show',
             ],
             [
                 'text' => 'Riwayat Pembayaran',
-                'url' => 'user.payment.history',
+                'route' => 'user.bill.history',
             ],
         ],
     ],
@@ -54,16 +54,16 @@ return [
         'submenu' => [
             [
                 'text' => 'Buat Tiket Bantuan',
-                'url' => 'user.tickets.create',
+                'route' => 'user.ticket.create',
             ],
             [
                 'text' => 'Daftar Tiket Saya',
-                'url' => 'user.tickets.index',
+                'route' => 'user.ticket.index',
             ],
-            [
-                'text' => 'FAQ • Tanya Jawab',
-                'url' => 'user.faq',
-            ],
+//            [
+//                'text' => 'FAQ • Tanya Jawab',
+//                'url' => 'user.faq',
+//            ],
         ],
     ]
 ];

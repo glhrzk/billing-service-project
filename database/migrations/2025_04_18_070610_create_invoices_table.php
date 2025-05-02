@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('bill_id')->constrained()->onDelete('cascade');
-            $table->string('invoice_number')->unique();
-            $table->date('invoice_date');
+            $table->foreignId('user_bill_id')->constrained()->onDelete('cascade');
+            $table->date('date');
             $table->string('file_path')->nullable();
             $table->timestamps();
         });

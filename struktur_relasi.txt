@@ -1,0 +1,5 @@
+Model | Tipe Relasi | Keterangan
+User → UserPackage, UserBill, Ticket | hasMany | User punya banyak langganan, tagihan, tiket
+Package → UserPackage | hasMany | Satu paket bisa banyak user
+UserPackage → PackageBill | hasMany | Setiap langganan user ada banyak tagihan bulanan
+UserBill → Invoice dan Income | hasOne | Satu user_bill punya satu invoice dan satu income

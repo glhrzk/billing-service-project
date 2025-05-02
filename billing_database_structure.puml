@@ -1,0 +1,123 @@
+@startuml
+
+entity users {
+  * id : BIGINT (PK)
+  --
+  name : VARCHAR(255)
+  email : VARCHAR(255) (UNIQUE)
+  password : VARCHAR(255)
+  phone : VARCHAR(20)
+  address : VARCHAR(255)
+  due_date : TINYINT
+  status : ENUM('active', 'inactive')
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity packages {
+  * id : BIGINT (PK)
+  --
+  name : VARCHAR(255)
+  price : DECIMAL(10,2)
+  speed : VARCHAR(50)
+  description : VARCHAR(255)
+  status : ENUM('active', 'inactive')
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity user_packages {
+  * id : BIGINT (PK)
+  --
+  user_id : BIGINT (FK)
+  package_id : BIGINT (FK)
+  locked_name : VARCHAR(255)
+  locked_price : DECIMAL(10,2)
+  locked_speed : VARCHAR(50)
+  locked_description : VARCHAR(255)
+  is_active : BOOLEAN
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity user_bills {
+  * id : BIGINT (PK)
+  --
+  user_id : BIGINT (FK)
+  billing_month : DATE
+  amount : DECIMAL(10,2)
+  status : ENUM('paid', 'unpaid')
+  paid_at : DATE
+  payment_method : ENUM('cash', 'bank_transfer')
+  invoice_number : VARCHAR(100) (UNIQUE)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity package_bills {
+  * id : BIGINT (PK)
+  --
+  user_bill_id : BIGINT (FK)
+  locked_name : VARCHAR(255)
+  locked_price : DECIMAL(10,2)
+  locked_speed : VARCHAR(50)
+  locked_description: VARCHAR(50)
+  discount_amount : DECIMAL(10,2)
+  final_amount : DECIMAL(10,2)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity invoices {
+  * id : BIGINT (PK)
+  --
+  user_bill_id : BIGINT (FK)
+  date : DATE
+  file_path : VARCHAR(255)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity incomes {
+  * id : BIGINT (PK)
+  --
+  user_bill_id : BIGINT (FK)
+  date : DATE
+  amount : DECIMAL(10,2)
+  description : VARCHAR(255)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity expenses {
+  * id : BIGINT (PK)
+  --
+  date : DATE
+  amount : DECIMAL(10,2)
+  category : ENUM('office_supplies', 'utilities', 'rent', 'salaries', 'other')
+  description : VARCHAR(255)
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity tickets {
+  * id : BIGINT (PK)
+  --
+  user_id : BIGINT (FK)
+  subject : VARCHAR(255)
+  description : TEXT
+  status : ENUM('open', 'in_progress', 'resolved', 'closed')
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+users ||--o{ user_packages : has
+packages ||--o{ user_packages : has
+users ||--o{ user_bills : has
+user_packages ||--o{ user_bills : indirectly generates
+user_bills ||--o{ package_bills : has
+user_bills ||--|| invoices : has
+user_bills ||--|| incomes : has
+users ||--o{ tickets : has
+
+@enduml

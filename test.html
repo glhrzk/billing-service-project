@@ -1,0 +1,39 @@
+<div style="display: flex; gap: 40px; align-items: flex-start;">
+
+  <!-- Termination Code Table -->
+  <div>
+    <h3>HAProxy Termination State Reference</h3>
+    <table>
+      <thead>
+        <tr><th>Code</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>--</code></td><td>✅ Normal termination</td></tr>
+        <tr><td><code>cD</code></td><td>❌ Client disconnected unexpectedly</td></tr>
+        <tr><td><code>SD</code></td><td>↘ Server closed the connection</td></tr>
+        <tr><td><code>PR</code></td><td>⏱️ Proxy timeout waiting response</td></tr>
+        <tr><td><code>CR</code></td><td>🚫 Connection refused</td></tr>
+        <tr><td><code>PC</code></td><td>🔌 Proxy connect timeout</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- IP Mapping Table -->
+  <div>
+    <h3>Source IP Reference</h3>
+    <table>
+      <thead>
+        <tr><th>Source IP</th><th>Hostname</th><></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>192.168.123.1</code></td><td>VM A</td></tr>
+        <tr><td><code>192.168.123.3</code></td><td>VM B</td></tr>
+        <tr><td><code>192.168.123.5</code></td><td>VM C</td></tr>
+        <tr><td><code>192.168.123.7</code></td><td>VM D</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<p style="margin-top: 20px;"><em>Use these codes to interpret logs and trace traffic by IP.</em></p>

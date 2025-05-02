@@ -20,7 +20,7 @@ class PackageFactory extends Factory
             //
             'name' => $this->faker->word(),
             'price' => $this->faker->numberBetween(100000, 300000),
-            'speed' => $this->faker->randomElement(['10 Mbps', '20 Mbps']),
+            'speed' => $this->faker->randomElement(['10 Mbps', '20 Mbps', '50 Mbps']),
             'description' => $this->faker->paragraph(),
         ];
     }

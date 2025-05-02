@@ -43,4 +43,23 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function userPackages()
+    {
+        // each user has many user packages
+        return $this->hasMany(UserPackage::class);
+    }
+
+    public function userBills()
+    {
+        // each user has many user bills
+        return $this->hasMany(UserBill::class);
+    }
+
+    public function tickets()
+    {
+        // each user has many tickets
+        return $this->hasMany(Ticket::class);
+    }
+
+
 }

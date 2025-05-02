@@ -1,54 +1,45 @@
-@extends('adminlte::page')
+@extends('layouts.app')
+@section('subtitle', 'Welcome')
 
-@section('title', 'Dashboard')
-
-@section('content_header')
-@stop
-
-@section('content')
-
-    @include('notifications.alerts')
+@section('content_body')
     <form action="{{ route('user.profile.password.update', auth()->id()) }}" method="POST">
-        <x-adminlte-card title="Profile" theme-mode="outline" class="mt-sm-2 elevation-3" body-class="bg-light"
-                         header-class="bg-light" footer-class="bg-light border-top rounded border-light" collapsible
-                         removable>
-            @csrf
-            @method('PUT')
+        @csrf
+        @method('PUT')
 
-            <x-adminlte-input name="current_password" placeholder="password saat ini" type="password" autocomplete="off"
-                              label="Password saat ini"
-                              required="yes">
-                <x-slot name="prependSlot">
-                    <div class="input-group-text">
-                        <i class="fas fa-lock-open"></i>
-                    </div>
-                </x-slot>
-            </x-adminlte-input>
-
-            <x-adminlte-input name="new_password" placeholder="password baru" type="password" autocomplete="off"
-                              label="Password baru"
-                              required="yes">
-                <x-slot name="prependSlot">
-                    <div class="input-group-text">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                </x-slot>
-            </x-adminlte-input>
-            <x-adminlte-input name="new_password_confirmation" placeholder="konfirmasi password baru" type="password"
-                              label="Konfirmasi password baru"
-                              autocomplete="off" required="yes">
-                <x-slot name="prependSlot">
-                    <div class="input-group-text">
-                        <i class="fas fa-lock"></i>
-                    </div>
-                </x-slot>
-            </x-adminlte-input>
-
-            <x-slot name="footerSlot">
-                <x-adminlte-button class="ml-auto" theme="success" type="submit" label="Kirim"/>
-                <x-adminlte-button class="ml-auto" theme="danger" type="reset" label="Reset"/>
+        <x-adminlte-input name="current_password" placeholder="password saat ini" type="password" autocomplete="off"
+                          label="Password saat ini"
+                          required="yes">
+            <x-slot name="prependSlot">
+                <div class="input-group-text">
+                    <i class="fas fa-lock-open"></i>
+                </div>
             </x-slot>
-        </x-adminlte-card>
-    </form>
+        </x-adminlte-input>
 
+        <x-adminlte-input name="new_password" placeholder="password baru" type="password" autocomplete="off"
+                          label="Password baru"
+                          required="yes">
+            <x-slot name="prependSlot">
+                <div class="input-group-text">
+                    <i class="fas fa-lock"></i>
+                </div>
+            </x-slot>
+        </x-adminlte-input>
+        <x-adminlte-input name="new_password_confirmation" placeholder="konfirmasi password baru" type="password"
+                          label="Konfirmasi password baru"
+                          autocomplete="off" required="yes">
+            <x-slot name="prependSlot">
+                <div class="input-group-text">
+                    <i class="fas fa-lock"></i>
+                </div>
+            </x-slot>
+        </x-adminlte-input>
+
+        <hr class="my-3">
+        <x-adminlte-button class="ml-auto" theme="primary" type="button" label="Beranda"
+                           onclick="window.location.href='{{ route('user.dashboard') }}'"/>
+        <x-adminlte-button class="ml-auto" theme="success" type="submit" label="Simpan"/>
+        <x-adminlte-button class="ml-auto" theme="danger" type="button" label="Kembali"
+                           onclick="window.location.href='{{ url()->previous() }}'"/>
+    </form>
 @stop
