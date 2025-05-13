@@ -28,8 +28,6 @@ class ProfileController extends Controller
         $request->validate([
             'current_password' => 'required',
             'new_password' => 'required|min:6|confirmed|different:current_password',
-        ], [
-            'new_password.confirmed' => 'Password baru tidak sama dengan konfirmasi password baru',
         ]);
 
 

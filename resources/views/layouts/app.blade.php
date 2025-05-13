@@ -31,6 +31,15 @@
     </strong>
 @stop
 
+@if ($errors->any())
+    @push('js')
+        <script>
+            @foreach ($errors->all() as $error)
+            toastr.error("{{ $error }}", "Error", {timeOut: 5000});
+            @endforeach
+        </script>
+    @endpush
+@endif
 
 @push('js')
     <script>

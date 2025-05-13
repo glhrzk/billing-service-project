@@ -19,7 +19,7 @@
             {{-- STATUS DAN TANGGAL --}}
             <div class="mb-3">
                 <span
-                    class="badge {{badge_status_label($userBill->status)}}">{{ payment_status_label($userBill->status) }}</span>
+                    class="badge {{payment_status_badge($userBill->status)}}">{{ payment_status_label($userBill->status) }}</span>
                 <span class="ml-1"><strong>Jatuh Tempo:</strong> Tanggal {{ $user->due_date }}</span>
             </div>
 

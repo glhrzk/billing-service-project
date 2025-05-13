@@ -12,7 +12,7 @@
                     <th>Subjek</th>
                     <th>Status</th>
                     <th>Dibuat Pada</th>
-                    <th>Terakhir Diperbarui</th>
+                    <th>Terakhir di update</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -27,6 +27,13 @@
                             </span>
                         </td>
                         <td>{{ $ticket->created_at->translatedFormat('d F Y H:i') }}</td>
+                        <td>
+                            @if($ticket->replies->isNotEmpty())
+                                {{ $ticket->replies->last()->created_at->translatedFormat('d F Y H:i') }}
+                            @else
+                                {{ $ticket->updated_at->translatedFormat('d F Y H:i') }}
+                            @endif
+                        </td>
                         <td>
                             <a href="{{ route('user.ticket.reply.show', $ticket->id) }}" class="btn btn-sm btn-info">
                                 <i class="fas fa-eye mr-1"></i>Lihat

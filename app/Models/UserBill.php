@@ -28,4 +28,10 @@ class UserBill extends Model
         return $this->hasOne(Income::class);
     }
 
+    public function packageBills()
+    {
+        return $this->hasMany(PackageBill::class);
+    }
+
+
 }

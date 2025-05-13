@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Mega', 'price' => 250000, 'speed' => '50Mbps'],
         )->create();
 
-        // Create user_packages
+        // Create user-packages
         $miniPackage = $packages->firstWhere('name', 'Mini');
         $superPackage = $packages->firstWhere('name', 'Super');
 

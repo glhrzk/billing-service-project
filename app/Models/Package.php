@@ -9,6 +9,8 @@ class Package extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name', 'speed', 'description', 'price', 'status'];
+
     public function userPackages()
     {
         // each package has many user packages

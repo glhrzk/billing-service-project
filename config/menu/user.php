@@ -4,66 +4,70 @@ return [
     [
         'text' => 'Dashboard',
         'icon' => 'fas fa-tachometer-alt',
-        'url' => 'user.dashboard',
+        'url'  => 'user.dashboard',
     ],
+
+    ['header' => 'Profil & Akun'],
     [
         'text' => 'Profile',
-        'icon' => 'fa fa-user',
+        'icon' => 'fas fa-user',
         'submenu' => [
             [
-                'text' => 'Lihat Data',
+                'text'  => 'Lihat Data',
                 'route' => 'user.profile.show',
             ],
             [
-                'text' => 'Ganti Password',
+                'text'  => 'Ganti Password',
                 'route' => 'user.profile.password.edit',
             ],
         ],
     ],
+
+    ['header' => 'Paket & Layanan'],
     [
         'text' => 'Paket Saya',
-        'icon' => 'fas fa-list',
+        'icon' => 'fas fa-box-open',
         'submenu' => [
             [
-                'text' => 'Lihat Paket Aktif',
+                'text'  => 'Lihat Paket Aktif',
                 'route' => 'user.package.show',
             ],
             [
-                'text' => 'Histori Paket',
+                'text'  => 'Histori Paket',
                 'route' => 'user.package.history',
             ],
         ],
     ],
+
+    ['header' => 'Keuangan'],
     [
         'text' => 'Tagihan Saya',
-        'icon' => 'fas fa-money-bill',
+        'icon' => 'fas fa-file-invoice-dollar',
         'submenu' => [
             [
-                'text' => 'Lihat Tagihan',
+                'text'  => 'Lihat Tagihan',
                 'route' => 'user.bill.show',
             ],
             [
-                'text' => 'Riwayat Pembayaran',
+                'text'  => 'Riwayat Pembayaran',
                 'route' => 'user.bill.history',
             ],
         ],
     ],
+
+    ['header' => 'Support'],
     [
         'text' => 'Bantuan',
-        'icon' => 'fas fa-hands-helping',
+        'icon' => 'fas fa-headset',
         'submenu' => [
             [
-                'text' => 'Buat Tiket Bantuan',
+                'text'  => 'Buat Tiket Bantuan',
                 'route' => 'user.ticket.create',
             ],
             [
-                'text' => 'Daftar Tiket Saya',
+                'text'  => 'Daftar Tiket Saya',
                 'route' => 'user.ticket.index',
             ],
-//            [
-//                'text' => 'FAQ • Tanya Jawab',
-//                'url' => 'user.faq',
-//            ],
         ],
-    ]
+    ],
 ];

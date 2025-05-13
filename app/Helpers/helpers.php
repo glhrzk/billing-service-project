@@ -20,6 +20,21 @@ if (!function_exists('rupiah_label')) {
         }
     }
 
+    if (!function_exists('status_badge')) {
+        /**
+         * Convert `active` / other value to a human‑readable label.
+         */
+        function status_badge(string|bool $status): string
+        {
+            return match ($status) {
+                'active' => 'bg-green',
+                'inactive' => 'bg-gray',
+                default => 'Unknown',
+            };
+        }
+    }
+
+
     if (!function_exists('payment_status_label')) {
         /**
          * Convert `paid` / other value to a human‑readable label.
@@ -36,11 +51,11 @@ if (!function_exists('rupiah_label')) {
         }
     }
 
-    if (!function_exists('badge_status_label')) {
+    if (!function_exists('payment_status_badge')) {
         /**
          * Convert `active` / other value to a human‑readable label.
          */
-        function badge_status_label(string|bool $status): string
+        function payment_status_badge(string|bool $status): string
         {
             return match ($status) {
                 'paid' => 'bg-green',

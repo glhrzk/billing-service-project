@@ -86,7 +86,7 @@
             </td>
             <td width="50%">
                 <strong>Status:</strong>
-                <span class="{{ badge_status_label($userBill->status) }}">
+                <span class="{{ payment_status_badge($userBill->status) }}">
                     {{ payment_status_label($userBill->status) }}
                 </span>
                 <br>
