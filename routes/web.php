@@ -20,15 +20,6 @@ Route::get('/', function () {
 
 Auth::routes();
 
-//Route::get('/home', [function () {
-//    return view('home')->middleware('auth');
-//
-//}]);
-
-Route::get('/home', [function () {
-    return view('content');
-}])->middleware('auth');;
-
 
 Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
 

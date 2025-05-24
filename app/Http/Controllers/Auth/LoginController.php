@@ -20,19 +20,26 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    protected function redirectTo()
+    {
+        return auth()->user()->hasRole('admin')
+            ? route('admin.dashboard')
+            : route('user.dashboard');
+    }
+
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
-    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public
+    function __construct()
     {
         $this->middleware('guest')->except('logout');
         $this->middleware('auth')->only('logout');
