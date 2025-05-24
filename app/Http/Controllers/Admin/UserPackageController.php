@@ -42,11 +42,12 @@ class UserPackageController extends Controller
         // filled the request with package data
         $request->merge([
             'package_name_snapshot' => $package->name,
-            'package_price_snapshot' => ($package->price - $request->active_discount_amount),
+            'package_price_snapshot' => $package->price,
             'package_speed_snapshot' => $package->speed,
             'package_description_snapshot' => $package->description,
             'is_active' => 'active',
         ]);
+
 
         if ($existingPackage) {
             if ($existingPackage->is_active == 'active') {

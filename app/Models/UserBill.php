@@ -24,9 +24,10 @@ class UserBill extends Model
     public function finalAmount(): Attribute
     {
         return Attribute::get(
-            fn() => ($this->amount ?? 0) - collect($this->billItems)->sum('package_discount_amount') - ($this->discount_amount ?? 0)
+            fn() => ($this->amount ?? 0) - ($this->discount_amount ?? 0)
         );
     }
+
 
     public function billItems()
     {

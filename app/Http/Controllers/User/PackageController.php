@@ -6,16 +6,24 @@ use App\Http\Controllers\Controller;
 
 class PackageController extends Controller
 {
-    public function show()
+    public function index()
     {
-        // Show the user's package active details
-        $user = auth()->user()->userPackages()->where('is_active', 'active')->get();
-        return view('user.packages.show', compact('user'));
+        $user = auth()->user();
+
+        $userPackages = $user->userPackages()
+            ->where('is_active', 'active')
+            ->latest()
+            ->get();
+
+        return view('user.packages.index', compact('userPackages'));
     }
 
     public function history()
     {
-        $user = auth()->user()->userPackages;
-        return view('user.packages.history', compact('user'));
+        $user = auth()->user();
+        $userPackages = $user->userPackages()
+            ->latest()
+            ->get();
+        return view('user.packages.history', compact('userPackages'));
     }
 }

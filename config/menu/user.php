@@ -4,7 +4,7 @@ return [
     [
         'text' => 'Dashboard',
         'icon' => 'fas fa-tachometer-alt',
-        'url'  => 'user.dashboard',
+        'route'  => 'user.dashboard',
     ],
 
     ['header' => 'Profil & Akun'],
@@ -30,7 +30,7 @@ return [
         'submenu' => [
             [
                 'text'  => 'Lihat Paket Aktif',
-                'route' => 'user.package.show',
+                'route' => 'user.package.index',
             ],
             [
                 'text'  => 'Histori Paket',
@@ -46,7 +46,7 @@ return [
         'submenu' => [
             [
                 'text'  => 'Lihat Tagihan',
-                'route' => 'user.bill.show',
+                'route' => 'user.bills.index',
             ],
             [
                 'text'  => 'Riwayat Pembayaran',

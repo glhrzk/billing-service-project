@@ -10,24 +10,28 @@ use Illuminate\Http\Request;
 
 class UserBillController extends Controller
 {
-    public function show()
+
+    public function index()
     {
         $user = auth()->user();
 
-        // Get user bills (unpaid)
         $userBills = UserBill::where('user_id', $user->id)
             ->where('status', '!=', 'paid')
             ->orderBy('billing_month', 'asc')
             ->get();
 
-        // Get package bills grouped by user_bill_id
-        $packageBillsGroup = [];
+        return view('user.bills.index', compact('userBills'));
+    }
 
-        foreach ($userBills as $userBill) {
-            $packageBillsGroup[$userBill->id] = BillItem::where('user_bill_id', $userBill->id)->get();
-        }
+    public function show($id)
+    {
+        $user = auth()->user();
 
-        return view('user.bills.show', compact('user', 'userBills', 'packageBillsGroup'));
+        $userBill = UserBill::with('billItems')
+            ->where('user_id', $user->id)
+            ->findOrFail($id);
+
+        return view('user.bills.show', compact('userBill'));
 
     }
 
@@ -60,51 +64,36 @@ class UserBillController extends Controller
         }
         $userBill->save();
         if ($originalStatus == 'unpaid') {
-            return redirect()->route('user.bill.show')->with('success', 'Konfirmasi pembayaran berhasil diajukan.');
+            return redirect()->back()->with('success', 'Konfirmasi pembayaran berhasil diajukan.');
         } elseif ($originalStatus == 'rejected') {
-            return redirect()->route('user.bill.show')->with('success', 'Bukti pembayaran berhasil diperbarui setelah ditolak.');
+            return redirect()->back()->with('info', 'Konfirmasi pembayaran berhasil diajukan kembali.');
         }
     }
 
-    public function history()
+    public function history(Request $request)
     {
         $user = auth()->user();
-        $currentYear = now()->year;
-
-        if (!request()->has('year')) {
-            return redirect()->route('user.bill.history', ['year' => now()->year]);
-        }
-
-
-        // Ambil semua tahun tagihan
-        $availableYears = UserBill::where('user_id', $user->id)
-            ->where('status', 'paid')
-            ->selectRaw('YEAR(billing_month) as year')
-            ->distinct()
-            ->orderByDesc('year')
-            ->pluck('year');
-
-        // Ambil parameter tahun, default ke tahun sekarang
-        $selectedYear = request()->query('year', $currentYear);
 
         $query = UserBill::where('user_id', $user->id)
             ->where('status', 'paid');
 
-        if ($selectedYear !== 'all') {
-            $query->whereYear('billing_month', $selectedYear);
+        if ($request->filled('year')) {
+            $query->whereYear('billing_month', $request->year);
         }
 
-        $userBills = $query->orderBy('billing_month', 'asc')->get();
-
-        // Group package_bills
-        $packageBillsGroup = [];
-        foreach ($userBills as $userBill) {
-            $packageBillsGroup[$userBill->id] = BillItem::where('user_bill_id', $userBill->id)->get();
+        if ($request->filled('month')) {
+            $query->whereMonth('billing_month', $request->month);
         }
 
-        return view('user.bills.history', compact(
-            'user', 'userBills', 'packageBillsGroup', 'availableYears', 'selectedYear'
-        ));
+        $paidBills = $query->latest('billing_month')->get();
+
+        $availableYears = UserBill::selectRaw('YEAR(billing_month) as year')
+            ->where('user_id', $user->id)
+            ->distinct()
+            ->pluck('year')
+            ->sortDesc();
+
+        return view('user.bills.history', compact('paidBills', 'availableYears'));
     }
 
 

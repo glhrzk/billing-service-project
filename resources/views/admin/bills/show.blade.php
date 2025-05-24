@@ -24,10 +24,18 @@
                     </x-slot>
                 </x-adminlte-input>
             </div>
-            <div class="col-md-6">
-                <x-adminlte-input name="amount" label="Total Tagihan"
-                                  value="{{ rupiah_label($userBill->amount) }}" disabled/>
-            </div>
+            @if($userBill->discount_amount > 0)
+                <div class="col-md-6">
+                    <x-adminlte-input name="amount" label="Total Tagihan Sebelum Diskon"
+                                      value="{{ rupiah_label($userBill->amount) }}" disabled/>
+                </div>
+            @else
+                <div class="col-md-6">
+                    <x-adminlte-input name="final_amount" label="Yang Harus Dibayar"
+                                      value="{{ rupiah_label($userBill->final_amount) }}" disabled/>
+                </div>
+            @endif
+
 
             @if($userBill->status === 'paid')
                 <div class="col-md-3">
@@ -93,7 +101,7 @@
         <a href="{{ route('admin.bills.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Kembali ke Daftar Tagihan
         </a>
-       
+
         <x-adminlte-button label="Lihat & Download Invoice"
                            icon="fas fa-file-invoice"
                            theme="success"

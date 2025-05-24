@@ -21,15 +21,30 @@ class TicketReplyController extends Controller
     {
         $request->validate([
             'message' => 'required|string',
+            'attachment' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'attachment.max' => 'Gambar tidak boleh lebih dari 2MB.',
+            'attachment.mimes' => 'Gambar harus dalam format JPG, JPEG, atau PNG.',
         ]);
 
         $ticket = Ticket::findOrFail($ticketId);
 
+        // Upload file jika ada
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('ticket_attachments', $filename, 'public');
+        } else {
+            $path = null;
+        }
+
+        // Simpan balasan
         $ticket->replies()->create([
             'user_id' => auth()->id(),
             'message' => $request->message,
+            'attachment' => $path,
         ]);
 
-        return redirect()->back()->with('success', 'Tiket berhasil dibalas!');
+        return redirect()->back()->with('success', 'Balasan berhasil dikirim!');
     }
 }

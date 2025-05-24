@@ -37,7 +37,7 @@
 
         <hr class="my-3">
         <x-adminlte-button class="ml-auto" theme="primary" type="button" label="Beranda"
-                           onclick="window.location.href='{{ route('user.dashboard') }}'"/>
+                           onclick="window.location.href='{{ route('admin.dashboard') }}'"/>
         <x-adminlte-button class="ml-auto" theme="success" type="submit" label="Simpan"/>
         <x-adminlte-button class="ml-auto" theme="danger" type="button" label="Kembali"
                            onclick="window.location.href='{{ url()->previous() }}'"/>

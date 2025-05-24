@@ -24,7 +24,7 @@
                 </tr>
                 <tr>
                     <th>Diskon</th>
-                    <td>{{ $userBill->discount_amount ? rupiah_label($userBill->discount_amoint) : '-' }}</td>
+                    <td>{{ $userBill->discount_amount ? rupiah_label($userBill->discount_amount) : '-' }}</td>
                 </tr>
                 <tr>
                     <th>Alasan Diskon</th>

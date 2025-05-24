@@ -9,19 +9,22 @@
     {{-- Statistik Ringkas --}}
     <div class="row">
         <div class="col-md-3 mb-3">
-            <x-adminlte-small-box icon="fas fa-users" theme="info" url=" {{ route('admin.users.index') }} " url-text="Lihat pelanggan">
+            <x-adminlte-small-box icon="fas fa-users" theme="info" url=" {{ route('admin.users.index') }} "
+                                  url-text="Lihat pelanggan">
                 <x-slot name="title">{{ $totalUsers }}</x-slot>
                 Total Pelanggan
             </x-adminlte-small-box>
         </div>
         <div class="col-md-3 mb-3">
-            <x-adminlte-small-box icon="fas fa-box" theme="primary" url=" {{ route('admin.packages.index') }}" url-text="Lihat paket">
+            <x-adminlte-small-box icon="fas fa-box" theme="primary" url=" {{ route('admin.packages.index') }}"
+                                  url-text="Lihat paket">
                 <x-slot name="title">{{ $totalPackages }}</x-slot>
                 Paket Internet
             </x-adminlte-small-box>
         </div>
         <div class="col-md-3 mb-3">
-            <x-adminlte-small-box icon="fas fa-wallet" theme="success" url=" {{ route('admin.bills.index') }} " url-text="Tagihan Bulan ini">
+            <x-adminlte-small-box icon="fas fa-wallet" theme="success" url=" {{ route('admin.bills.index') }} "
+                                  url-text="Tagihan Bulan ini">
                 <x-slot name="title">{{ rupiah_label($billingThisMonth) }}</x-slot>
                 Tagihan Bulan Ini
             </x-adminlte-small-box>
@@ -43,7 +46,7 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <strong>{{ $ticket->subject }}</strong><br>
-                                <small>{{ $ticket->user->name }} - {{ $ticket->created_at->format('d M Y') }}</small>
+                                <small>{{ $ticket->user->name }} - {{ $ticket->created_at->diffForHumans() }}</small>
                             </div>
                             <span class="badge badge-{{ $ticket->status === 'open' ? 'warning' : 'success' }}">
                                 {{ ucfirst($ticket->status) }}
@@ -65,7 +68,11 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <strong>{{ $bill->user->name }}</strong><br>
-                                <small>Transfer: {{ rupiah_label($bill->amount) }} - {{ $bill->transfer_date?->format('d M Y') }}</small>
+                                <small>
+                                    Nominal: {{ rupiah_label($bill->final_amount) }} -
+                                    {{ $bill->transfer_date ? \Carbon\Carbon::parse($bill->transfer_date)->format('d M Y') : '-' }}
+                                </small>
+
                             </div>
                             <span class="badge badge-warning">Pending</span>
                         </li>
@@ -73,7 +80,8 @@
                         <li class="list-group-item text-center">Tidak ada pembayaran yang perlu dikonfirmasi.</li>
                     @endforelse
                 </ul>
-                <a href="{{ route('admin.bills.verification') }}" class="btn btn-sm btn-warning mt-3">Lihat Semua Tagihan</a>
+                <a href="{{ route('admin.bills.verification') }}" class="btn btn-sm btn-warning mt-3">Lihat Semua
+                    Tagihan</a>
             </x-adminlte-card>
         </div>
     </div>

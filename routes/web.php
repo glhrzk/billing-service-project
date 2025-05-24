@@ -32,19 +32,18 @@ Route::get('/home', [function () {
 
 Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('user.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\User\DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profile/show', [\App\Http\Controllers\User\ProfileController::class, 'show'])->name('profile.show');
 
     Route::get('/profile/edit/password', [\App\Http\Controllers\User\ProfileController::class, 'editPassword'])->name('profile.password.edit');
     Route::put('/profile/update/password', [\App\Http\Controllers\User\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
-    Route::get('/package/show', [\App\Http\Controllers\User\PackageController::class, 'show'])->name('package.show');
+    Route::get('/package', [\App\Http\Controllers\User\PackageController::class, 'index'])->name('package.index');
     Route::get('/package/history', [\App\Http\Controllers\User\PackageController::class, 'history'])->name('package.history');
 
-    Route::get('/bill/show', [\App\Http\Controllers\User\UserBillController::class, 'show'])->name('bill.show');
+    Route::get('/bill', [\App\Http\Controllers\User\UserBillController::class, 'index'])->name('bills.index');
+    Route::get('/bill/{id}/show/', [\App\Http\Controllers\User\UserBillController::class, 'show'])->name('bill.show');
     Route::get('/bill/history', [\App\Http\Controllers\User\UserBillController::class, 'history'])->name('bill.history');
     Route::put('bill/{id}/pay', [\App\Http\Controllers\User\UserBillController::class, 'pay'])->name('bill.pay');
 

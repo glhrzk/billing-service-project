@@ -1,80 +1,59 @@
 @extends('layouts.app')
-@section('subtitle', 'Welcome')
+@section('subtitle', 'Riwayat Pembayaran')
 @section('plugins.Datatables', true)
 
 @section('content_body')
-    <form method="GET" action="{{ route('user.bill.history') }}">
-        @csrf
-        <div class="form-group row">
-            <label for="year" class="col-sm-2 col-form-label font-weight-bold">Filter Tahun</label>
-            <div class="col-sm-4">
-                <select name="year" id="year" class="form-control" onchange="this.form.submit()">
-                    <option value="all" {{ $selectedYear === 'all' ? 'selected' : '' }}>Semua Tahun</option>
-                    @foreach($availableYears as $year)
-                        <option value="{{ $year }}" {{ (string) $selectedYear === (string) $year ? 'selected' : '' }}>
-                            {{ $year }}
-                        </option>
-                    @endforeach
-                </select>
+    <x-adminlte-card title="Riwayat Pembayaran Anda" theme="dark" icon="fas fa-money-check-alt">
+        <form method="GET">
+            <div class="row">
+                <div class="col-md-3">
+                    <x-adminlte-select name="year" label="Tahun">
+                        <option value="">Semua</option>
+                        @foreach($availableYears as $year)
+                            <option
+                                value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+                        @endforeach
+                    </x-adminlte-select>
+                </div>
+                <div class="col-md-3">
+                    <x-adminlte-select name="month" label="Bulan">
+                        <option value="">Semua</option>
+                        @foreach(range(1, 12) as $m)
+                            <option value="{{ $m }}" {{ (int)request('month') === $m ? 'selected' : '' }}>
+                                {{ DateTime::createFromFormat('!m', $m)->format('F') }}
+                            </option>
+                        @endforeach
+                    </x-adminlte-select>
+                </div>
+                <div class="col-md-3">
+                    <label>&nbsp;</label>
+                    <x-adminlte-button label="Filter" theme="primary" type="submit" icon="fas fa-search" class="w-100"/>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
 
+        @php
+            $heads = ['#', 'Bulan', 'Metode Pembayaran', 'Tanggal Transfer', 'Nominal', 'Bukti', 'Aksi'];
+            $config = [
+                'data' => $paidBills->map(function ($bill, $i) {
+                    return [
+                        $i + 1,
+                        month_label($bill->billing_month),
+                        ucfirst($bill->payment_method),
+                        $bill->transfer_date ? \Carbon\Carbon::parse($bill->transfer_date)->format('d M Y') : '-',
+                        rupiah_label($bill->final_amount),
+                        $bill->transfer_proof
+                            ? '<a href="' . asset('storage/' . $bill->transfer_proof) . '" target="_blank" class="btn btn-sm btn-outline-success">Lihat</a>'
+                            : '-',
+                        '<a href="' . route('user.bill.show', $bill->id) . '" class="btn btn-sm btn-info">Detail</a>',
+                    ];
+                })->toArray(),
+                'columns' => [['orderable' => false], null, null, null, null, ['orderable' => false], ['orderable' => false]],
+                'order' => [[0, 'asc']],
+            ];
+        @endphp
 
-    @foreach($userBills as $userBill)
-        <x-adminlte-card title="Tagihan Bulan: {{ month_label($userBill->billing_month) }}" theme="dark"
-                         icon="fas fa-file-invoice">
-
-            {{-- STATUS DAN TANGGAL --}}
-            <div class="mb-3">
-                <span
-                    class="badge {{payment_status_badge($userBill->status)}}">{{ payment_status_label($userBill->status) }}</span>
-                <span class="ml-1"><strong>Jatuh Tempo:</strong> Tanggal {{ $user->due_date }}</span>
-            </div>
-
-            {{-- TABEL PAKET --}}
-            <table class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>Nama Paket</th>
-                    <th>Kecepatan</th>
-                    <th>Harga</th>
-                    <th>Diskon</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($packageBillsGroup[$userBill->id] as $packageBill)
-                    <tr>
-                        <td>{{ $packageBill->locked_name }}</td>
-                        <td>{{ $packageBill->locked_speed }}</td>
-                        <td>{{ rupiah_label($packageBill->locked_price) }}</td>
-                        <td>{{ rupiah_label($packageBill->discount_amount) }}</td>
-                        <td>{{ rupiah_label($packageBill->final_amount) }}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-
-            {{-- TOTAL TAGIHAN --}}
-            <div class="mt-3">
-                <h5><strong>Total Tagihan:</strong> {{ rupiah_label($userBill->amount) }}</h5>
-            </div>
-
-            {{-- FOOTER BUTTONS --}}
-            <x-slot name="footerSlot">
-
-                {{-- Tombol Invoice --}}
-                <a href="{{ route('user.invoice.show', $userBill->id) }}">
-                    <x-adminlte-button class="align-items-center ml-2" theme="outline-secondary"
-                                       label="Lihat Invoice"
-                                       icon="fas fa-file-invoice" icon-class="mr-2"/>
-                </a>
-
-            </x-slot>
-
-        </x-adminlte-card>
-
-    @endforeach
-
+        <x-adminlte-datatable id="tablePaidUser" :heads="$heads" :config="$config" striped hoverable bordered compressed
+                              beautify/>
+    </x-adminlte-card>
 @stop

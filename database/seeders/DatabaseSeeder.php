@@ -118,7 +118,8 @@ class DatabaseSeeder extends Seeder
                     'package_discount_reason' => $userPackage->active_discount_reason,
                 ]);
             }
-            $userBill->amount = collect($userBill->billItems)->sum('billed_package_price');
+            $userBill->amount = (collect($userBill->billItems)->sum('billed_package_price')) -
+                (collect($userBill->billItems)->sum('package_discount_amount'));
             $userBill->update();
         }
     }
