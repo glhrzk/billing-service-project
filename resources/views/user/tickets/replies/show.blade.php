@@ -38,7 +38,7 @@
                 </small>
             </div>
             <div class="bg-secondary text-white rounded px-3 py-2 mt-2 mt-md-0 ml-md-3" style="max-width: 60%;">
-                <small><strong>Deskripsi Awal:</strong></small><br>
+                <small><strong>Pesan Awal:</strong></small><br>
                 {{ $ticket->description }}
             </div>
         </div>

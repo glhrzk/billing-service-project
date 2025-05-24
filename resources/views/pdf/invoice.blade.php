@@ -5,33 +5,32 @@
     <title>Invoice {{ $userBill->invoice_number }}</title>
     <style>
         @page {
-            margin: 30px 40px;
+            margin: 30px 40px 30px 40px;
         }
 
         body {
             font-family: sans-serif;
-            font-size: 12px;
+            font-size: 13px;
             color: #333;
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         .section {
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 8px;
+            margin-top: 10px;
             table-layout: fixed;
         }
 
         td, th {
             border: 1px solid #ddd;
-            padding: 5px;
+            padding: 8px;
             vertical-align: top;
             word-wrap: break-word;
-            font-size: 11px;
         }
 
         th {
@@ -47,11 +46,11 @@
         }
 
         .col-label {
-            width: 65%;
+            width: 70%;
         }
 
         .col-value {
-            width: 35%;
+            width: 30%;
         }
 
         .status-paid {
@@ -79,7 +78,7 @@
 
 <h2>Invoice #{{ $userBill->invoice_number }}</h2>
 <p>
-    <strong>Tanggal Invoice:</strong> {{ \Carbon\Carbon::parse($userBill->updated_at)->translatedFormat('d F Y') }}<br>
+    <strong>Tanggal Invoice:</strong> {{ $userBill->updated_at->translatedFormat('l, j F Y') }}<br>
     <strong>Periode Tagihan:</strong> {{ \Carbon\Carbon::parse($userBill->billing_month)->translatedFormat('F Y') }}
 </p>
 
@@ -96,7 +95,7 @@
             <td width="50%">
                 <strong>Status:</strong>
                 <span class="status-{{ $userBill->status }}">
-                    {{ strtoupper($userBill->status) }}
+                    {{ strtoupper(payment_status_label($userBill->status)) }}
                 </span><br>
                 <strong>Jatuh Tempo:</strong> Tanggal {{ $userBill->user->due_date }}<br>
                 <strong>Metode:</strong> {{ ucfirst(str_replace('_', ' ', $userBill->payment_method)) }}<br>
@@ -104,7 +103,7 @@
                     <strong>Tanggal Transfer:</strong> {{ $userBill->transfer_date ?? '-' }}<br>
                 @endif
                 @if($userBill->status === 'paid')
-                    <strong>Dibayar:</strong> {{ \Carbon\Carbon::parse($userBill->paid_at)->translatedFormat('d F Y') }}
+                    <strong>Dibayar:</strong> {{ \Carbon\Carbon::parse($userBill->paid_at)->translatedFormat('l, j F Y') }}
                 @endif
             </td>
         </tr>
@@ -121,7 +120,7 @@
             <th>Harga</th>
             <th>Diskon</th>
             <th>Total</th>
-            <th>Alasan</th>
+            <th>Alasan Diskon</th>
         </tr>
         </thead>
         <tbody>
@@ -193,7 +192,7 @@
 @endif
 
 @if($userBill->status === 'paid')
-    <p style="margin-top: 20px; font-size: 11px; text-align: center;">
+    <p style="margin-top: 20px; font-size: 12px; text-align: center;">
         Pembayaran telah diterima dan dikonfirmasi oleh sistem. Invoice ini sah sebagai bukti pembayaran.
     </p>
 @endif

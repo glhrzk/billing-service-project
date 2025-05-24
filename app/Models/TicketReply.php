@@ -10,6 +10,7 @@ class TicketReply extends Model
         'ticket_id',
         'user_id',
         'message',
+        'attachment',
     ];
 
     public function user()

@@ -111,6 +111,16 @@ entity tickets {
   updated_at : TIMESTAMP
 }
 
+entity ticket_replies {
+  * id : BIGINT (PK)
+  --
+  ticket_id   : BIGINT (FK)
+  user_id     : BIGINT (FK)
+  message     : TEXT
+  created_at  : TIMESTAMP
+  updated_at  : TIMESTAMP
+}
+
 users ||--o{ user_packages : has
 packages ||--o{ user_packages : has
 users ||--o{ user_bills : has

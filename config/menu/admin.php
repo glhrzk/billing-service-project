@@ -44,17 +44,15 @@ return [
         'text' => 'Tagihan & Pembayaran',
         'icon' => 'fas fa-file-invoice-dollar',
         'submenu' => [
-            ['text' => 'Daftar Tagihan', 'route' => 'admin.bills.index'],
+            ['text' => 'Riwayat Tagihan', 'route' => 'admin.bills.index'],
             ['text' => 'Verifikasi Pembayaran', 'route' => 'admin.bills.verification'],
         ],
     ],
+
     [
-        'text' => 'Pengeluaran',
-        'icon' => 'fas fa-money-bill-wave',
-        'submenu' => [
-            ['text' => 'Riwayat Pengeluaran', 'route' => 'admin.expenses.index'],
-            ['text' => 'Tambah Pengeluaran', 'route' => 'admin.expenses.create'],
-        ],
+        'text' => 'Keuangan',
+        'icon' => 'fas fa-coins',
+        'route' => 'admin.finances.index',
     ],
 
     // BANTUAN
@@ -65,20 +63,6 @@ return [
         'icon' => 'fas fa-headset',
         'submenu' => [
             ['text' => 'Daftar Tiket', 'route' => 'admin.tickets.index'],
-            ['text' => 'Tiket Belum Dijawab', 'route' => 'admin.tickets.pending'],
-        ],
-    ],
-
-    // LAPORAN
-    ['header' => 'Laporan'],
-
-    [
-        'text' => 'Laporan & Riwayat',
-        'icon' => 'fas fa-chart-line',
-        'submenu' => [
-            ['text' => 'Pendapatan', 'route' => 'admin.reports.incomes'],
-            ['text' => 'Pengeluaran', 'route' => 'admin.reports.expenses'],
-            ['text' => 'Tagihan Bulanan', 'route' => 'admin.reports.bills'],
         ],
     ],
 
@@ -89,7 +73,6 @@ return [
         'text' => 'Profil Admin',
         'icon' => 'fas fa-user-cog',
         'submenu' => [
-            ['text' => 'Lihat Profil', 'route' => 'admin.profile.show'],
             ['text' => 'Ganti Password', 'route' => 'admin.profile.password.edit'],
         ],
     ],

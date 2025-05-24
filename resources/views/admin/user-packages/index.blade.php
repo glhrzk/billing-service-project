@@ -26,9 +26,9 @@
                 return [
                     $index + 1,
                     $userPackages->user->name,
-                    $userPackages->locked_name,
-                    $userPackages->locked_speed,
-                    rupiah_label($userPackages->locked_price),
+                    $userPackages->package_name_snapshot,
+                    $userPackages->package_speed_snapshot,
+                    rupiah_label($userPackages->package_price_snapshot),
                     $userPackages->created_at->translatedFormat('d M Y'),
                     $btnDetail . $btnDeactivate,
                 ];
@@ -93,20 +93,20 @@
 
             <div id="discount-section" class="d-none">
                 <div class="form-group">
-                    <label for="initial_discount_amount">Jumlah Diskon (Rp)</label>
-                    <input type="number" class="form-control" name="initial_discount_amount"
-                           id="initial_discount_amount" min="0">
+                    <label for="active_discount_amount">Jumlah Diskon (Rp)</label>
+                    <input type="number" class="form-control" name="active_discount_amount"
+                           id="active_discount_amount" min="0">
                 </div>
 
                 <div class="form-group">
-                    <label for="initial_discount_duration">Durasi Diskon (bulan)</label>
-                    <input type="number" class="form-control" name="initial_discount_duration"
-                           id="initial_discount_duration" min="1" value="1">
+                    <label for="active_discount_duration">Durasi Diskon (bulan)</label>
+                    <input type="number" class="form-control" name="active_discount_duration"
+                           id="active_discount_duration" min="1" >
                 </div>
 
                 <div class="form-group">
-                    <label for="initial_discount_reason">Alasan Promo</label>
-                    <input type="text" class="form-control" name="initial_discount_reason"
+                    <label for="active_discount_reason">Alasan Promo</label>
+                    <input type="text" class="form-control" name="active_discount_reason"
                            placeholder="Contoh: Promo Idul Fitri">
                 </div>
                 <div class="form-group">
@@ -130,16 +130,16 @@
                 <dd class="col-sm-8">{{ $subscription->user->name }}</dd>
 
                 <dt class="col-sm-3">Nama Paket</dt>
-                <dd class="col-sm-8">{{ $subscription->locked_name }}</dd>
+                <dd class="col-sm-8">{{ $subscription->package_name_snapshot }}</dd>
 
                 <dt class="col-sm-3">Kecepatan</dt>
-                <dd class="col-sm-8">{{ $subscription->locked_speed }}</dd>
+                <dd class="col-sm-8">{{ $subscription->package_speed_snapshot }}</dd>
 
                 <dt class="col-sm-3">Harga</dt>
-                <dd class="col-sm-8">{{ rupiah_label($subscription->locked_price) }}</dd>
+                <dd class="col-sm-8">{{ rupiah_label($subscription->package_price_snapshot) }}</dd>
 
                 <dt class="col-sm-3">Deskripsi</dt>
-                <dd class="col-sm-8">{{ $subscription->locked_description }}</dd>
+                <dd class="col-sm-8">{{ $subscription->package_description_snapshot	 }}</dd>
 
                 <dt class="col-sm-3">Status</dt>
                 <dd class="col-sm-8">
@@ -148,15 +148,15 @@
                 </span>
                 </dd>
 
-                @if($subscription->initial_discount_amount > 0)
+                @if($subscription->active_discount_amount > 0)
                     <dt class="col-sm-3">Diskon Awal</dt>
-                    <dd class="col-sm-8">{{ rupiah_label($subscription->initial_discount_amount) }}</dd>
+                    <dd class="col-sm-8">{{ rupiah_label($subscription->active_discount_amount) }}</dd>
 
                     <dt class="col-sm-3">Alasan Diskon</dt>
-                    <dd class="col-sm-8">{{ $subscription->initial_discount_reason }}</dd>
+                    <dd class="col-sm-8">{{ $subscription->active_discount_reason }}</dd>
 
                     <dt class="col-sm-3">Durasi Diskon</dt>
-                    <dd class="col-sm-8">{{ $subscription->initial_discount_duration }} bulan</dd>
+                    <dd class="col-sm-8">{{ $subscription->active_discount_duration }} bulan</dd>
                 @endif
 
                 <dt class="col-sm-3">Dibuat Pada</dt>
@@ -173,7 +173,7 @@
             const hasDiscount = document.getElementById('has_discount');
             const discountSection = document.getElementById('discount-section');
             const radios = document.querySelectorAll('input[name="package_id"]');
-            const discountInput = document.getElementById('initial_discount_amount');
+            const discountInput = document.getElementById('active_discount_amount');
             const finalTotalDisplay = document.getElementById('final_discounted_total');
 
             function rupiah(value) {

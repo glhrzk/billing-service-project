@@ -25,13 +25,12 @@ class UserPackageController extends Controller
 
     public function store(Request $request)
     {
-//        dd($request->all());
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'package_id' => 'required|exists:packages,id',
-            'initial_discount_amount' => 'nullable|numeric',
-            'initial_discount_reason' => 'nullable|string|max:255',
-            'initial_discount_duration' => 'nullable|numeric|min:1|max:12',
+            'active_discount_amount' => 'nullable|numeric',
+            'active_discount_reason' => 'nullable|string|max:255',
+            'active_discount_duration' => 'nullable|numeric|min:1|max:12',
         ]);
 
         // Check if the user already has an active package
@@ -42,10 +41,10 @@ class UserPackageController extends Controller
 
         // filled the request with package data
         $request->merge([
-            'locked_name' => $package->name,
-            'locked_price' => ($package->price - $request->initial_discount_amount),
-            'locked_speed' => $package->speed,
-            'locked_description' => $package->description,
+            'package_name_snapshot' => $package->name,
+            'package_price_snapshot' => ($package->price - $request->active_discount_amount),
+            'package_speed_snapshot' => $package->speed,
+            'package_description_snapshot' => $package->description,
             'is_active' => 'active',
         ]);
 
@@ -55,16 +54,23 @@ class UserPackageController extends Controller
             } else {
                 // Update the existing package to inactive
                 $existingPackage->update([
-                    'locked_name' => $package->name,
-                    'locked_price' => $package->price,
-                    'locked_speed' => $package->speed,
-                    'locked_description' => $package->description,
+                    'package_name_snapshot' => $package->name,
+                    'package_price_snapshot' => $package->price,
+                    'package_speed_snapshot' => $package->speed,
+                    'package_description_snapshot' => $package->description,
                     'is_active' => 'active',
                 ]);
                 return redirect()->route('admin.user-packages.index')->with('success', 'Paket berhasil diperbarui.');
             }
         }
 
+        if ($request->active_discount_amount == null) {
+            $request->merge([
+                'active_discount_amount' => null,
+                'active_discount_reason' => null,
+                'active_discount_duration' => null,
+            ]);
+        }
         // Create a new user package
         UserPackage::create($request->all());
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\PackageBill;
+use App\Models\BillItem;
 use App\Models\UserBill;
 use App\Models\UserPackage;
 use Illuminate\Http\Request;
@@ -24,7 +24,7 @@ class UserBillController extends Controller
         $packageBillsGroup = [];
 
         foreach ($userBills as $userBill) {
-            $packageBillsGroup[$userBill->id] = PackageBill::where('user_bill_id', $userBill->id)->get();
+            $packageBillsGroup[$userBill->id] = BillItem::where('user_bill_id', $userBill->id)->get();
         }
 
         return view('user.bills.show', compact('user', 'userBills', 'packageBillsGroup'));
@@ -99,7 +99,7 @@ class UserBillController extends Controller
         // Group package_bills
         $packageBillsGroup = [];
         foreach ($userBills as $userBill) {
-            $packageBillsGroup[$userBill->id] = PackageBill::where('user_bill_id', $userBill->id)->get();
+            $packageBillsGroup[$userBill->id] = BillItem::where('user_bill_id', $userBill->id)->get();
         }
 
         return view('user.bills.history', compact(

@@ -63,9 +63,7 @@ Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(f
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
 
     // Dashboard
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
     // Manajemen User
     Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
@@ -84,42 +82,35 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     // Langganan User
     Route::get('/user-packages', [\App\Http\Controllers\Admin\UserPackageController::class, 'index'])->name('user-packages.index');
-    Route::put('/user-packages/{id}/', [\App\Http\Controllers\Admin\UserPackageController::class, 'update'])->name('user-package.deactivate');
+    Route::patch('/user-packages/{id}/', [\App\Http\Controllers\Admin\UserPackageController::class, 'update'])->name('user-package.deactivate');
     Route::post('/user-packages/', [\App\Http\Controllers\Admin\UserPackageController::class, 'store'])->name('user-package.store');
 
     // Tagihan & Pembayaran
     Route::get('/bills', [\App\Http\Controllers\Admin\UserBillController::class, 'index'])->name('bills.index');
     Route::get('/bill/{id}/show', [\App\Http\Controllers\Admin\UserBillController::class, 'show'])->name('bills.show');
+    Route::put('/bill/{id}/show', [\App\Http\Controllers\Admin\UserBillController::class, 'update'])->name('bills.update');
+    Route::get('/bills/verification', [\App\Http\Controllers\Admin\UserBillController::class, 'verification'])->name('bills.verification');
+    Route::get('/bills/verify/{id}', [\App\Http\Controllers\Admin\UserBillController::class, 'verify'])->name('bills.verify');
+    Route::patch('/bills/verify/{id}/action', [\App\Http\Controllers\Admin\UserBillController::class, 'verifyAction'])->name('bills.verify.action');
 
+    // Invoice
+    Route::get('/invoice/{id}/show', [\App\Http\Controllers\Admin\InvoiceController::class, 'download'])->name('invoice.download');
 
-
-    Route::get('/bills/verification', [BillController::class, 'verification'])->name('bills.verification');
-    Route::put('/bills/{id}/approve', [BillController::class, 'approve'])->name('bills.approve');
-    Route::put('/bills/{id}/reject', [BillController::class, 'reject'])->name('bills.reject');
-
-    // Pengeluaran
-    Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
-    Route::get('/expenses/create', [ExpenseController::class, 'create'])->name('expenses.create');
-    Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+    // Keuangan
+    Route::get('/finances', [\App\Http\Controllers\Admin\FinanceController::class, 'index'])->name('finances.index');
+    Route::post('/expenses', [\App\Http\Controllers\Admin\FinanceController::class, 'store'])->name('expenses.store');
 
     // Tiket Bantuan
-    Route::get('/tickets', [TicketController::class, 'index'])->name('tickets.index');
-    Route::get('/tickets/pending', [TicketController::class, 'pending'])->name('tickets.pending');
-    Route::get('/tickets/{id}/show', [TicketReplyController::class, 'show'])->name('tickets.reply.show');
-    Route::post('/tickets/{id}/reply', [TicketReplyController::class, 'store'])->name('tickets.reply.store');
+    Route::get('/tickets', [\App\Http\Controllers\Admin\TicketController::class, 'index'])->name('tickets.index');
 
-    // Laporan
-    Route::get('/reports/incomes', [ReportController::class, 'incomes'])->name('reports.incomes');
-    Route::get('/reports/expenses', [ReportController::class, 'expenses'])->name('reports.expenses');
-    Route::get('/reports/bills', [ReportController::class, 'bills'])->name('reports.bills');
+    Route::get('/tickets/{id}/show', [\App\Http\Controllers\Admin\TicketReplyController::class, 'show'])->name('tickets.reply.show');
+    Route::post('/tickets/{id}/reply', [\App\Http\Controllers\Admin\TicketReplyController::class, 'store'])->name('tickets.reply.store');
+    Route::patch('/tickets/{id}/close', [\App\Http\Controllers\Admin\TicketReplyController::class, 'close'])->name('tickets.close');
+    Route::get('/tickets/pending', [\App\Http\Controllers\Admin\TicketController::class, 'pending'])->name('tickets.pending');
 
-    // Notifikasi
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
     // Profil Admin
-    Route::get('/profile/show', [ProfileController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit/password', [ProfileController::class, 'editPassword'])->name('profile.password.edit');
-    Route::put('/profile/update/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
-
+    Route::get('/profile/edit/password', [\App\Http\Controllers\Admin\ProfileController::class, 'editPassword'])->name('profile.password.edit');
+    Route::patch('/profile/update/password', [\App\Http\Controllers\Admin\ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
 

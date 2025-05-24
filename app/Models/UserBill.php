@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,27 +11,41 @@ class UserBill extends Model
     /** @use HasFactory<\Database\Factories\UserBillFactory> */
     use HasFactory;
 
-    public function user()
+    protected $fillable = [
+        'discount_amount',
+        'discount_reason',
+        'status',
+        'payment_status',
+        'tranfer_date',
+        'transfer_proof',
+        'paid_at'
+    ];
+
+    public function finalAmount(): Attribute
     {
-        // each user can have multiple bills
-        return $this->belongsTo(User::class);
+        return Attribute::get(
+            fn() => ($this->amount ?? 0) - collect($this->billItems)->sum('package_discount_amount') - ($this->discount_amount ?? 0)
+        );
     }
 
-    public function invoices()
+    public function billItems()
     {
-        // each bill can have multiple invoices
+        return $this->hasMany(BillItem::class);
+    }
+
+    public function invoice()
+    {
         return $this->hasOne(Invoice::class);
     }
 
-    public function incomes()
+    public function income()
     {
-        // each bill can have multiple incomes
-        return $this->hasOne(Income::class);
+        return $this->hasOne(Income::class, 'bill_id');
     }
 
-    public function packageBills()
+    public function user()
     {
-        return $this->hasMany(PackageBill::class);
+        return $this->belongsTo(User::class);
     }
 
 

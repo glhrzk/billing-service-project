@@ -37,9 +37,6 @@ class TicketController extends Controller
             'status' => 'open',
         ]);
 
-        // Send notification to admin
-        Notification::send(User::role('admin')->get(), new TicketCreatedNotification($ticket));
-
         return redirect()->back()->with('success', 'Tiket berhasil dikirim!');
 
     }

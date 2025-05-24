@@ -2,32 +2,32 @@
 
 namespace Database\Seeders;
 
-use App\Models\Package;
+use App\Models\Ticket;
 use App\Models\User;
+use App\Models\Package;
 use App\Models\UserPackage;
 use App\Models\UserBill;
-use App\Models\PackageBill;
+use App\Models\BillItem;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Arr;
 use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create roles
+        // Roles
         Role::create(['name' => 'admin']);
         Role::create(['name' => 'user']);
 
-        // Create admin user
+        // Admin user
         $admin = User::factory()->create([
             'name' => 'Admin Galih',
             'email' => 'admin@laravel.id',
         ]);
         $admin->assignRole('admin');
 
-        // Create regular user
+        // Regular user
         $user = User::factory()->create([
             'name' => 'User David',
             'email' => 'user@laravel.id',
@@ -35,88 +35,91 @@ class DatabaseSeeder extends Seeder
         ]);
         $user->assignRole('user');
 
-        // Create packages
+        // Paket-paket
         $packages = Package::factory()->count(3)->sequence(
             ['name' => 'Mini', 'price' => 100000, 'speed' => '10Mbps'],
             ['name' => 'Super', 'price' => 150000, 'speed' => '20Mbps'],
             ['name' => 'Mega', 'price' => 250000, 'speed' => '50Mbps'],
         )->create();
 
-        // Create user-packages
-        $miniPackage = $packages->firstWhere('name', 'Mini');
-        $superPackage = $packages->firstWhere('name', 'Super');
+        $mini = $packages->firstWhere('name', 'Mini');
+        $super = $packages->firstWhere('name', 'Super');
 
+        // UserPackage aktif
         $miniUserPackage = UserPackage::create([
             'user_id' => $user->id,
-            'package_id' => $miniPackage->id,
-            'locked_name' => $miniPackage->name,
-            'locked_price' => $miniPackage->price,
-            'locked_speed' => $miniPackage->speed,
-            'locked_description' => $miniPackage->description,
+            'package_id' => $mini->id,
+            'package_name_snapshot' => $mini->name,
+            'package_price_snapshot' => $mini->price,
+            'package_speed_snapshot' => $mini->speed,
+            'package_description_snapshot' => $mini->description,
+            'active_discount_amount' => 15000,
+            'active_discount_reason' => 'Promo Kemerdekaan',
+            'active_discount_duration' => 2,
             'is_active' => 'active',
         ]);
 
         $superUserPackage = UserPackage::create([
             'user_id' => $user->id,
-            'package_id' => $superPackage->id,
-            'locked_name' => $superPackage->name,
-            'locked_price' => $superPackage->price,
-            'locked_speed' => $superPackage->speed,
-            'locked_description' => $superPackage->description,
-            'is_active' => 'inactive', // Di bulan kedua, dianggap sudah tidak aktif
+            'package_id' => $super->id,
+            'package_name_snapshot' => $super->name,
+            'package_price_snapshot' => $super->price,
+            'package_speed_snapshot' => $super->speed,
+            'package_description_snapshot' => $super->description,
+            'is_active' => 'inactive',
         ]);
 
-        // Billing months
+        // Billing per bulan
         $billingMonths = [
-            '2023-10-01', // Bulan 1
-            '2023-11-01', // Bulan 2
+            '2023-10-01',
+            '2023-11-01',
         ];
+
+        Ticket::create([
+            'user_id' => $user->id,
+            'subject' => 'Test Ticket',
+            'description' => 'This is a test ticket.',
+            'status' => 'open',
+        ]);
 
         foreach ($billingMonths as $billingMonth) {
             $billingDate = Carbon::parse($billingMonth);
 
-            // Create UserBill
             $userBill = UserBill::create([
                 'user_id' => $user->id,
                 'billing_month' => $billingMonth,
-                'amount' => 0, // akan dihitung setelah semua package_bills dibuat
+                'amount' => 0,
+                'discount_amount' => null,
+                'discount_reason' => null,
                 'status' => 'unpaid',
                 'payment_method' => 'cash',
                 'invoice_number' => 'INV-' . $billingDate->format('Ym') . '-' . $user->id,
             ]);
 
-            // Logic paket yang aktif berdasarkan bulan
             $activePackages = [];
-            if ($billingMonth == '2023-10-01') {
+            if ($billingMonth === '2023-10-01') {
                 $activePackages = [$miniUserPackage, $superUserPackage];
-            } elseif ($billingMonth == '2023-11-01') {
-                $activePackages = [$miniUserPackage]; // hanya Mini saja aktif
+            } elseif ($billingMonth === '2023-11-01') {
+                $activePackages = [$miniUserPackage];
             }
-
-            $totalFinalAmount = 0;
 
             foreach ($activePackages as $userPackage) {
-                $lockedPrice = $userPackage->locked_price;
-                $discountAmount = 0; // tidak ada diskon
-                $finalAmount = $lockedPrice - $discountAmount;
+                $isStillInPromo = $userPackage->created_at->diffInMonths($billingDate) < ($userPackage->active_discount_duration ?? 0);
+                $discount = $isStillInPromo ? $userPackage->active_discount_amount : null;
 
-                PackageBill::create([
+                BillItem::create([
                     'user_bill_id' => $userBill->id,
-                    'locked_name' => $userPackage->locked_name,
-                    'locked_price' => $lockedPrice,
-                    'locked_speed' => $userPackage->locked_speed,
-                    'locked_description' => $userPackage->locked_description,
-                    'discount_amount' => $discountAmount,
-                    'final_amount' => $finalAmount,
+                    'package_id' => $userPackage->package_id,
+                    'billed_package_name' => $userPackage->package_name_snapshot,
+                    'billed_package_price' => $userPackage->package_price_snapshot,
+                    'billed_package_speed' => $userPackage->package_speed_snapshot,
+                    'billed_package_description' => $userPackage->package_description_snapshot,
+                    'package_discount_amount' => $discount,
+                    'package_discount_reason' => $userPackage->active_discount_reason,
                 ]);
-
-                $totalFinalAmount += $finalAmount;
             }
-
-            // Update total amount di user_bill
-            $userBill->update([
-                'amount' => $totalFinalAmount,
-            ]);
+            $userBill->amount = collect($userBill->billItems)->sum('billed_package_price');
+            $userBill->update();
         }
     }
 }

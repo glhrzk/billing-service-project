@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\PackageBill;
+use App\Models\BillItem;
 use App\Models\UserBill;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -14,7 +14,7 @@ class InvoiceController extends Controller
     {
         $user = auth()->user();
         $userBill = UserBill::findOrFail($billId);
-        $packageBillsGroup = PackageBill::where('user_bill_id', $billId)->get();
+        $packageBillsGroup = BillItem::where('user_bill_id', $billId)->get();
 
         return view('user.invoices.show', compact('user', 'userBill', 'packageBillsGroup'));
     }
@@ -23,7 +23,7 @@ class InvoiceController extends Controller
     {
         $user = auth()->user();
         $userBill = UserBill::findOrFail($billId);
-        $packageBillsGroup = PackageBill::where('user_bill_id', $billId)->get();
+        $packageBillsGroup = BillItem::where('user_bill_id', $billId)->get();
 
         $pdf = Pdf::loadView('user.invoices.download', compact('user', 'userBill', 'packageBillsGroup'));
         $pdf->setPaper('A4', 'landscape');

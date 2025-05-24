@@ -15,16 +15,21 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('package_id')->constrained()->onDelete('cascade');
 
-            // make snapshot of the package at the time of assignment
-            $table->string('locked_name')->nullable();
-            $table->string('locked_price')->nullable();
-            $table->string('locked_speed')->nullable();
-            $table->string('locked_description')->nullable();
+            /*
+             *  make snapshot of the package at the time of assignment
+             *  this is to prevent the package from being changed in the future
+             *  and to keep the package data consistent
+             */
+            $table->string('package_name_snapshot')->nullable();
+            $table->decimal('package_price_snapshot', 10, 2)->nullable();
+            $table->string('package_speed_snapshot')->nullable();
+            $table->text('package_description_snapshot')->nullable();
 
+            // Initial discount details with dynamic values
+            $table->decimal('active_discount_amount', 10, 2)->nullable();
+            $table->string('active_discount_reason')->nullable();
+            $table->tinyInteger('active_discount_duration')->nullable(); // Duration in months
 
-            $table->decimal('initial_discount_amount', 10, 2)->nullable();
-            $table->string('initial_discount_reason')->nullable();
-            $table->tinyInteger('initial_discount_duration')->nullable();
             $table->enum('is_active', ['active', 'inactive'])->default('active');
             $table->timestamps();
 

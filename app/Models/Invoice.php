@@ -15,4 +15,11 @@ class Invoice extends Model
         return $this->belongsTo(UserBill::class);
     }
 
+    public function getBilledTotalAttribute()
+    {
+        return ($this->billed_package_price ?? 0)
+            + ($this->billed_addon_price ?? 0)
+            - ($this->billed_discount ?? 0);
+    }
+
 }

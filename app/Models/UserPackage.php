@@ -12,13 +12,13 @@ class UserPackage extends Model
     protected $fillable = [
         'user_id',
         'package_id',
-        'locked_name',
-        'locked_price',
-        'locked_speed',
-        'locked_description',
-        'initial_discount_amount',
-        'initial_discount_reason',
-        'initial_discount_duration',
+        'package_name_snapshot',
+        'package_price_snapshot',
+        'package_speed_snapshot',
+        'package_description_snapshot',
+        'active_discount_amount',
+        'active_discount_reason',
+        'active_discount_duration',
         'is_active',
     ];
 

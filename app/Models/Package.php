@@ -11,10 +11,15 @@ class Package extends Model
 
     protected $fillable = ['name', 'speed', 'description', 'price', 'status'];
 
-    public function userPackages()
+    public function users()
     {
-        // each package has many user packages
-        return $this->hasMany(UserPackage::class);
+        return $this->belongsToMany(\App\Models\User::class, 'user_packages');
     }
+
+    public function billItems()
+    {
+        return $this->hasMany(BillItem::class);
+    }
+
 
 }

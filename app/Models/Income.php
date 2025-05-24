@@ -9,6 +9,13 @@ class Income extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'user_bill_id',
+        'date',
+        'amount',
+        'description',
+    ];
+
     public function userBill()
     {
         // each income can be associated with a user bill
