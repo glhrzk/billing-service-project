@@ -1,0 +1,12 @@
+
+@startuml
+|Sistem|
+start
+:Jadwal tagihan aktif;
+
+:Ambil user dengan paket aktif;
+:Hitung total tagihan (termasuk diskon);
+:Simpan tagihan ke database;
+
+stop
+@enduml

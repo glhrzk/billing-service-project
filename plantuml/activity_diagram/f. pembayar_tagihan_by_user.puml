@@ -1,0 +1,15 @@
+
+@startuml
+|User|
+start
+:Pilih tagihan yang akan dibayar;
+:Upload bukti pembayaran;
+
+|Sistem|
+:Simpan data pembayaran;
+:Tandai status: menunggu verifikasi;
+
+|User|
+:Tampilkan notifikasi berhasil;
+stop
+@enduml

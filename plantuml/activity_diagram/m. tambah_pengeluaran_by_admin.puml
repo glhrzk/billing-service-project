@@ -1,0 +1,11 @@
+
+@startuml
+|Admin|
+start
+:Akses halaman tambah pengeluaran;
+:Isi form pengeluaran;
+
+|Sistem|
+:Simpan data ke database;
+stop
+@enduml

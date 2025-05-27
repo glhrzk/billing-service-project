@@ -1,0 +1,16 @@
+
+@startuml
+|Admin|
+start
+:Akses halaman manajemen user;
+
+|Sistem|
+:Tampilkan daftar user;
+
+|Admin|
+:Tambah/Edit user;
+
+|Sistem|
+:Simpan perubahan ke database;
+stop
+@enduml

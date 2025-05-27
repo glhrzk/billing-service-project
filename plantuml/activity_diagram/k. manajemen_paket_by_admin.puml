@@ -1,0 +1,16 @@
+
+@startuml
+|Admin|
+start
+:Akses halaman paket;
+
+|Sistem|
+:Tampilkan data paket;
+
+|Admin|
+:Tambah/Edit data paket;
+
+|Sistem|
+:Simpan perubahan ke database;
+stop
+@enduml

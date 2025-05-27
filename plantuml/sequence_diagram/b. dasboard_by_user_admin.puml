@@ -1,0 +1,13 @@
+@startuml
+actor User
+boundary "Halaman Dashboard" as DashboardPage
+control "DashboardController" as DashboardCtrl
+database "Database" as DB
+
+User -> DashboardPage : akses dashboard
+DashboardPage -> DashboardCtrl : permintaan data dashboard
+DashboardCtrl -> DB : ambil data sesuai peran
+DB --> DashboardCtrl : data ringkasan/dashboard
+DashboardCtrl -> DashboardPage : kirim data
+DashboardPage -> User : tampilkan tampilan dashboard
+@enduml

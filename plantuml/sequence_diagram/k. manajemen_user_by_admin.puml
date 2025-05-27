@@ -1,0 +1,16 @@
+@startuml
+actor Admin
+boundary "Halaman Manajemen User" as UserPage
+control "UserController" as UserCtrl
+database "Database" as DB
+
+Admin -> UserPage : akses halaman user
+UserPage -> UserCtrl : permintaan daftar user
+UserCtrl -> DB : ambil semua user
+DB --> UserCtrl : data user
+UserCtrl -> UserPage : tampilkan user
+
+Admin -> UserPage : tambah/edit user
+UserPage -> UserCtrl : kirim data
+UserCtrl -> DB : simpan perubahan
+@enduml

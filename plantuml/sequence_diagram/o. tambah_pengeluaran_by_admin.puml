@@ -1,0 +1,11 @@
+@startuml
+actor Admin
+boundary "Halaman Pengeluaran" as ExpensePage
+control "FinanceController" as FinanceCtrl
+database "Database" as DB
+
+Admin -> ExpensePage : tambah pengeluaran
+ExpensePage -> FinanceCtrl : kirim data
+FinanceCtrl -> DB : simpan pengeluaran
+FinanceCtrl -> ExpensePage : tampilkan notifikasi berhasil
+@enduml

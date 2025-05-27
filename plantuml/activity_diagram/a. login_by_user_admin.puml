@@ -1,0 +1,20 @@
+@startuml
+|User|
+start
+:Masuk ke halaman login;
+:Input email dan password;
+
+|Sistem|
+:Terima data login;
+:Verifikasi data;
+
+if (Data valid?) then (T)
+  :Periksa peran user;
+  :Arahkan ke dashboard;
+else (F)
+  :Tampilkan pesan kesalahan;
+endif
+
+|User|
+stop
+@enduml

@@ -1,0 +1,14 @@
+
+@startuml
+|User|
+start
+:Akses halaman paket;
+
+|Sistem|
+:Ambil data paket aktif;
+:Ambil data riwayat paket;
+
+|User|
+:Tampilkan informasi paket;
+stop
+@enduml

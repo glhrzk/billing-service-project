@@ -1,0 +1,13 @@
+@startuml
+actor Admin
+boundary "Halaman Riwayat Keuangan" as ReportPage
+control "FinanceController" as FinanceCtrl
+database "Database" as DB
+
+Admin -> ReportPage : akses laporan keuangan
+ReportPage -> FinanceCtrl : minta data pemasukan & pengeluaran
+FinanceCtrl -> DB : ambil data berdasarkan bulan/tahun
+DB --> FinanceCtrl : data transaksi
+FinanceCtrl -> ReportPage : tampilkan data
+Admin -> ReportPage : unduh laporan PDF
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+actor Admin
+boundary "Halaman Paket" as PaketPage
+control "PackageController" as PackageCtrl
+database "Database" as DB
+
+Admin -> PaketPage : akses halaman paket
+PaketPage -> PackageCtrl : permintaan semua paket
+PackageCtrl -> DB : ambil data paket
+DB --> PackageCtrl : daftar paket
+PackageCtrl -> PaketPage : tampilkan data
+
+Admin -> PaketPage : tambah/edit paket
+PaketPage -> PackageCtrl : kirim data
+PackageCtrl -> DB : simpan perubahan
+@enduml

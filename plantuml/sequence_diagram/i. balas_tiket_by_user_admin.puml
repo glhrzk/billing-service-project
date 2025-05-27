@@ -1,0 +1,16 @@
+@startuml
+actor User
+boundary "Halaman Detail Tiket" as TicketReplyPage
+control "TicketReplyController" as TicketReplyCtrl
+database "Database" as DB
+
+User -> TicketReplyPage : akses detail tiket
+TicketReplyPage -> TicketReplyCtrl : minta isi balasan tiket
+TicketReplyCtrl -> DB : ambil isi balasan berdasarkan tiket_id
+DB --> TicketReplyCtrl : data balasan
+TicketReplyCtrl -> TicketReplyPage : tampilkan riwayat chat
+
+User -> TicketReplyPage : kirim balasan baru
+TicketReplyPage -> TicketReplyCtrl : kirim isi pesan
+TicketReplyCtrl -> DB : simpan balasan ke tiket
+@enduml

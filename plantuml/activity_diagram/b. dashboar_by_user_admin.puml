@@ -1,0 +1,19 @@
+@startuml
+|User|
+start
+:Akses halaman dashboard;
+
+|Sistem|
+:Periksa peran pengguna;
+
+if (Peran = user?) then (T)
+  :Ambil data paket & tagihan user;
+  :Tampilkan ringkasan langganan dan status tagihan;
+else (F)
+  :Ambil data statistik sistem;
+  :Tampilkan jumlah user, tiket, pemasukan & pengeluaran;
+endif
+
+|User|
+stop
+@enduml

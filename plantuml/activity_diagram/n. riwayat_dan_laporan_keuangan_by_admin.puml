@@ -1,0 +1,17 @@
+
+@startuml
+|Admin|
+start
+:Akses halaman riwayat keuangan;
+
+|Sistem|
+:Ambil pemasukan dan pengeluaran;
+:Tampilkan data;
+
+|Admin|
+:Pilih opsi ekspor;
+
+|Sistem|
+:Hasilkan laporan PDF;
+stop
+@enduml

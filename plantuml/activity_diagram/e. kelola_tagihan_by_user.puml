@@ -1,0 +1,14 @@
+
+@startuml
+|User|
+start
+:Akses halaman tagihan;
+
+|Sistem|
+:Ambil tagihan aktif;
+:Ambil riwayat tagihan;
+
+|User|
+:Tampilkan daftar tagihan;
+stop
+@enduml

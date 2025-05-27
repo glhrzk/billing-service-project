@@ -1,0 +1,16 @@
+
+@startuml
+|Admin|
+start
+:Akses halaman verifikasi pembayaran;
+
+|Sistem|
+:Tampilkan data pembayaran;
+
+|Admin|
+:Periksa bukti dan validasi;
+
+|Sistem|
+:Ubah status menjadi lunas;
+stop
+@enduml

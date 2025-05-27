@@ -1,0 +1,28 @@
+
+@startuml
+|User|
+start
+:Ajukan tiket bantuan;
+
+|Sistem|
+:Simpan tiket;
+
+|Admin|
+:Buka tiket;
+
+|Sistem|
+:Tampilkan tiket & riwayat;
+
+|Admin|
+:Balas tiket;
+:Simpan balasan;
+
+|User|
+:Balas tiket;
+:Simpan balasan;
+
+|Admin|
+:Tandai tiket selesai;
+
+stop
+@enduml

@@ -1,0 +1,14 @@
+
+@startuml
+|User|
+start
+:Pilih opsi lihat atau unduh invoice;
+
+|Sistem|
+:Ambil data tagihan dan item;
+:Tampilkan halaman pratinjau atau hasilkan PDF;
+
+|User|
+:Selesaikan proses;
+stop
+@enduml

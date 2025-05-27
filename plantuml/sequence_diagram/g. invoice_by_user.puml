@@ -1,0 +1,13 @@
+@startuml
+actor User
+boundary "Halaman Invoice" as InvoicePage
+control "InvoiceController" as InvoiceCtrl
+database "Database" as DB
+
+User -> InvoicePage : akses invoice
+InvoicePage -> InvoiceCtrl : minta data invoice
+InvoiceCtrl -> DB : ambil data invoice & item
+DB --> InvoiceCtrl : data invoice lengkap
+InvoiceCtrl -> InvoicePage : kirim data
+InvoicePage -> User : tampilkan atau unduh invoice
+@enduml

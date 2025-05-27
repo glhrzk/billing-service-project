@@ -1,0 +1,15 @@
+@startuml
+actor User
+boundary "Halaman Login" as LoginPage
+control "LoginController" as LoginCtrl
+database "Database" as DB
+boundary "Dashboard" as DashboardPage
+
+User -> LoginPage : isi email & password
+LoginPage -> LoginCtrl : kirim data login
+LoginCtrl -> DB : validasi kredensial
+DB --> LoginCtrl : hasil validasi
+LoginCtrl -> DashboardPage : arahkan ke dashboard
+DashboardPage -> User : tampilkan dashboard
+LoginCtrl -> LoginPage : tampilkan pesan error
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+actor User
+boundary "Halaman Profil" as ProfilePage
+control "ProfileController" as ProfileCtrl
+database "Database" as DB
+
+User -> ProfilePage : akses halaman profil
+ProfilePage -> ProfileCtrl : minta data user
+ProfileCtrl -> DB : ambil data profil & jatuh tempo
+DB --> ProfileCtrl : data profil user
+ProfileCtrl -> ProfilePage : tampilkan data
+@enduml

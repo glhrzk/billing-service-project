@@ -1,0 +1,15 @@
+@startuml
+actor Admin
+boundary "Halaman Verifikasi" as VerifyPage
+control "UserBillController" as BillCtrl
+database "Database" as DB
+
+Admin -> VerifyPage : akses halaman verifikasi
+VerifyPage -> BillCtrl : ambil data pembayaran
+BillCtrl -> DB : ambil bukti & status pembayaran
+DB --> BillCtrl : data pembayaran
+
+Admin -> VerifyPage : verifikasi data
+VerifyPage -> BillCtrl : ubah status ke terverifikasi
+BillCtrl -> DB : update status tagihan
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+actor Admin
+boundary "Halaman Kelola Paket User" as ManagePage
+control "UserPackageController" as UserPackageCtrl
+database "Database" as DB
+
+Admin -> ManagePage : akses kelola paket user
+ManagePage -> UserPackageCtrl : minta data paket aktif user
+UserPackageCtrl -> DB : ambil data paket user
+DB --> UserPackageCtrl : data paket aktif & histori
+UserPackageCtrl -> ManagePage : tampilkan paket
+
+Admin -> ManagePage : tambah/ubah/nonaktifkan paket
+ManagePage -> UserPackageCtrl : kirim data perubahan
+UserPackageCtrl -> DB : simpan data baru
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+control "Scheduler" as Scheduler
+control "UserBillController" as BillCtrl
+database "Database" as DB
+
+Scheduler -> BillCtrl : trigger generate tagihan bulanan
+BillCtrl -> DB : ambil data user & paket aktif
+DB --> BillCtrl : data user & paket
+BillCtrl -> DB : simpan tagihan baru
+@enduml

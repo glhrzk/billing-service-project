@@ -1,0 +1,10 @@
+@startuml
+actor User
+boundary "Halaman Tiket" as TicketPage
+control "TicketController" as TicketCtrl
+database "Database" as DB
+
+User -> TicketPage : buat tiket baru
+TicketPage -> TicketCtrl : kirim data tiket
+TicketCtrl -> DB : simpan tiket
+@enduml

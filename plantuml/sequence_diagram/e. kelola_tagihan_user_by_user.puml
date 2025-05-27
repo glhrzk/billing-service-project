@@ -1,0 +1,13 @@
+@startuml
+actor User
+boundary "Halaman Tagihan" as TagihanPage
+control "UserBillController" as BillCtrl
+database "Database" as DB
+
+User -> TagihanPage : akses halaman tagihan
+TagihanPage -> BillCtrl : permintaan data tagihan
+BillCtrl -> DB : query tagihan berdasarkan user_id
+DB --> BillCtrl : data tagihan aktif & riwayat
+BillCtrl -> TagihanPage : kirim data
+TagihanPage -> User : tampilkan daftar tagihan
+@enduml

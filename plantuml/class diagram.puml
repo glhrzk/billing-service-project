@@ -1,0 +1,153 @@
+
+@startuml
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam classHeaderBackgroundColor #FDF6E3
+
+' === USER DAN LANGGANAN ===
+class User {
+  - id: int
+  - name: varchar
+  - email: varchar
+  - email_verified_at: datetime
+  - password: varchar
+  - phone: varchar
+  - address: text
+  - remember_token: varchar
+  - created_at: timestamp
+  - updated_at: timestamp
+  --
+  + tambahUser(): int
+  + editUser(): int
+  + hapusUser(): int
+  + lihatUser(): void
+}
+
+class Package {
+  - id: int
+  - name: varchar
+  - price: decimal
+  - speed: varchar
+  - description: text
+  - status: enum
+  - created_at: timestamp
+  - updated_at: timestamp
+  --
+  + tambahPaket(): int
+  + editPaket(): int
+  + hapusPaket(): int
+  + lihatPaket(): void
+}
+
+class UserPackage {
+  - id: int
+  - user_id: int
+  - package_id: int
+  - start_date: date
+  - end_date: date
+  - created_at: timestamp
+  - updated_at: timestamp
+  --
+  + tambahUserPackage(): int
+  + editUserPackage(): int
+  + hapusUserPackage(): int
+  + lihatUserPackage(): void
+}
+
+' === PENAGIHAN DAN PEMBAYARAN ===
+class UserBill {
+  - id: int
+  - user_id: int
+  - billing_date: date
+  - total_amount: decimal
+  - status: enum
+  - created_at: timestamp
+  - updated_at: timestamp
+  --
+  + buatTagihan(): int
+  + editTagihan(): int
+  + hapusTagihan(): int
+  + lihatTagihan(): void
+}
+
+class BillItem {
+  - id: int
+  - user_bill_id: int
+  - name: varchar
+  - amount: decimal
+  - created_at: timestamp
+  - updated_at: timestamp
+  --
+  + tambahItem(): int
+  + editItem(): int
+  + hapusItem(): int
+  + lihatItem(): void
+}
+
+class Income {
+  - id: int
+  - user_id: int
+  - user_bill_id: int
+  - payment_method: varchar
+  - amount: decimal
+  - income_date: date
+  - created_at: timestamp
+  - updated_at: timestamp
+  --
+  + tambahPemasukan(): int
+  + lihatPemasukan(): void
+}
+
+class Expense {
+  - id: int
+  - user_id: int
+  - description: text
+  - amount: decimal
+  - expense_date: date
+  - created_at: timestamp
+  - updated_at: timestamp
+  --
+  + tambahPengeluaran(): int
+  + lihatPengeluaran(): void
+}
+
+' === TIKET BANTUAN ===
+class Ticket {
+  - id: int
+  - user_id: int
+  - subject: varchar
+  - status: enum
+  - created_at: timestamp
+  - updated_at: timestamp
+  --
+  + buatTiket(): int
+  + lihatTiket(): void
+}
+
+class TicketReply {
+  - id: int
+  - ticket_id: int
+  - user_id: int
+  - message: text
+  - image_path: varchar
+  - created_at: timestamp
+  - updated_at: timestamp
+  --
+  + balasTiket(): int
+  + lihatBalasan(): void
+}
+
+' === RELASI ===
+User --> UserPackage
+UserPackage --> Package
+User --> UserBill
+UserPackage --> UserBill
+UserBill --> BillItem
+User --> Income
+UserBill --> Income
+User --> Expense
+User --> Ticket
+Ticket --> TicketReply
+User --> TicketReply
+
+@enduml

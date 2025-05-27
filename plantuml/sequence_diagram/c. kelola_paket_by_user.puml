@@ -1,0 +1,13 @@
+@startuml
+actor User
+boundary "Halaman Paket Saya" as PaketPage
+control "PackageController" as PackageCtrl
+database "Database" as DB
+
+User -> PaketPage : akses halaman paket
+PaketPage -> PackageCtrl : minta data paket & riwayat
+PackageCtrl -> DB : ambil data paket berdasarkan user
+DB --> PackageCtrl : data paket aktif & histori
+PackageCtrl -> PaketPage : kirim data
+PaketPage -> User : tampilkan informasi paket
+@enduml
