@@ -1,0 +1,33 @@
+@startuml
+|User/Admin|
+start
+:Login ke sistem;
+
+|Sistem|
+:Verifikasi akun dan peran;
+
+|User/Admin|
+:Akses dashboard;
+
+|Sistem|
+:Tampilkan dashboard sesuai peran;
+
+|User/Admin|
+if (Role = User?) then (T)
+  :Melihat tagihan dan paket;
+  :Mengunggah bukti pembayaran;
+  :Mengirim tiket bantuan;
+else (F)
+  :Mengelola user dan paket;
+  :Verifikasi pembayaran;
+  :Catat pengeluaran;
+endif
+
+|Sistem|
+:Simpan transaksi dan update database;
+
+|User/Admin|
+:Melihat invoice atau laporan;
+
+stop
+@enduml

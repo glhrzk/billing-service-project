@@ -1,133 +1,121 @@
 @startuml
+' Gunakan skinparam biar lebih bersih
+hide circle
+skinparam linetype ortho
 
 entity users {
-  * id : BIGINT (PK)
-  --
-  name : VARCHAR(255)
-  email : VARCHAR(255) (UNIQUE)
-  password : VARCHAR(255)
-  phone : VARCHAR(20)
-  address : VARCHAR(255)
-  due_date : TINYINT
-  status : ENUM('active', 'inactive')
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+    *id : bigint
+    name : string
+    email : string
+    password : string
+    phone : string
+    address : string
+    due_date : tinyint
+    status : enum
 }
 
 entity packages {
-  * id : BIGINT (PK)
-  --
-  name : VARCHAR(255)
-  price : DECIMAL(10,2)
-  speed : VARCHAR(50)
-  description : VARCHAR(255)
-  status : ENUM('active', 'inactive')
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+    *id : bigint
+    name : string
+    speed : string
+    price : decimal
+    description : text
+    status : string
 }
 
 entity user_packages {
-  * id : BIGINT (PK)
-  --
-  user_id : BIGINT (FK)
-  package_id : BIGINT (FK)
-  locked_name : VARCHAR(255)
-  locked_price : DECIMAL(10,2)
-  locked_speed : VARCHAR(50)
-  locked_description : VARCHAR(255)
-  is_active : BOOLEAN
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+    *id : bigint
+    user_id : FK
+    package_id : FK
+    package_name_snapshot : string
+    package_price_snapshot : decimal
+    active_discount_amount : decimal
+    active_discount_duration : tinyint
+    is_active : enum
+    created_at : timestamp
 }
 
 entity user_bills {
-  * id : BIGINT (PK)
-  --
-  user_id : BIGINT (FK)
-  billing_month : DATE
-  amount : DECIMAL(10,2)
-  status : ENUM('paid', 'unpaid')
-  paid_at : DATE
-  payment_method : ENUM('cash', 'bank_transfer')
-  invoice_number : VARCHAR(100) (UNIQUE)
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+    *id : bigint
+    user_id : FK
+    billing_month : date
+    amount : decimal
+    discount_amount : decimal
+    discount_reason : string
+    status : enum
+    payment_method : enum
+    transfer_date : date
+    transfer_proof : string
+    paid_at : date
+    invoice_number : string
 }
 
-entity package_bills {
-  * id : BIGINT (PK)
-  --
-  user_bill_id : BIGINT (FK)
-  locked_name : VARCHAR(255)
-  locked_price : DECIMAL(10,2)
-  locked_speed : VARCHAR(50)
-  locked_description: VARCHAR(50)
-  discount_amount : DECIMAL(10,2)
-  final_amount : DECIMAL(10,2)
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+entity bill_items {
+    *id : bigint
+    user_bill_id : FK
+    package_id : FK
+    billed_package_name : string
+    billed_package_price : decimal
+    package_discount_amount : decimal
+    final_amount : accessor
 }
 
 entity invoices {
-  * id : BIGINT (PK)
-  --
-  user_bill_id : BIGINT (FK)
-  date : DATE
-  file_path : VARCHAR(255)
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+    *id : bigint
+    user_bill_id : FK
+    date : date
+    file_path : string
 }
 
 entity incomes {
-  * id : BIGINT (PK)
-  --
-  user_bill_id : BIGINT (FK)
-  date : DATE
-  amount : DECIMAL(10,2)
-  description : VARCHAR(255)
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+    *id : bigint
+    user_bill_id : FK
+    date : date
+    amount : decimal
+    description : string
 }
 
 entity expenses {
-  * id : BIGINT (PK)
-  --
-  date : DATE
-  amount : DECIMAL(10,2)
-  category : ENUM('office_supplies', 'utilities', 'rent', 'salaries', 'other')
-  description : VARCHAR(255)
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+    *id : bigint
+    date : date
+    amount : decimal
+    description : string
 }
 
 entity tickets {
-  * id : BIGINT (PK)
-  --
-  user_id : BIGINT (FK)
-  subject : VARCHAR(255)
-  description : TEXT
-  status : ENUM('open', 'in_progress', 'resolved', 'closed')
-  created_at : TIMESTAMP
-  updated_at : TIMESTAMP
+    *id : bigint
+    user_id : FK
+    subject : string
+    description : text
+    status : enum
 }
 
 entity ticket_replies {
-  * id : BIGINT (PK)
-  --
-  ticket_id   : BIGINT (FK)
-  user_id     : BIGINT (FK)
-  message     : TEXT
-  created_at  : TIMESTAMP
-  updated_at  : TIMESTAMP
+    *id : bigint
+    ticket_id : FK
+    user_id : FK
+    message : text
+    attachment : string
 }
 
+' === RELATIONSHIPS ===
+
 users ||--o{ user_packages : has
-packages ||--o{ user_packages : has
 users ||--o{ user_bills : has
-user_packages ||--o{ user_bills : indirectly generates
-user_bills ||--o{ package_bills : has
-user_bills ||--|| invoices : has
-user_bills ||--|| incomes : has
 users ||--o{ tickets : has
+packages ||--o{ user_packages : assigned
+packages ||--o{ bill_items : snapshot
+user_packages }o--|| packages
+user_packages }o--|| users
+
+user_bills ||--o{ bill_items : detail
+user_bills ||--o{ invoices : has
+user_bills ||--o{ incomes : generate
+user_bills ||--o{ expenses : relate (manual)
+user_bills ||--o{ bill_items
+bill_items }o--|| packages
+
+tickets ||--o{ ticket_replies : has
+ticket_replies }o--|| users
 
 @enduml

@@ -1,0 +1,23 @@
+@startuml
+|ICDNet|
+start
+:Melakukan Penagihan;
+
+|Pelanggan|
+: Mendapatkan Tagihan;
+: Mengkonfirmasi Tagihan;
+
+|Pelanggan|
+if (Condition?) then (Ya)
+  :Melakukan Pembayaran;
+  |ICDNet|
+  :Mencatat Pembayaran;
+else (Tidak)
+  |ICDNet|
+  :Mengajukan Penundaan Pembayaran;
+endif
+
+|ICDNet|
+:Melakukan Penagihan;
+stop
+@enduml

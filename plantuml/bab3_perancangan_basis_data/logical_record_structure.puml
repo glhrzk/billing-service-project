@@ -1,0 +1,130 @@
+@startuml
+skinparam monochrome true
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam classHeaderBackgroundColor white
+
+' ================== ENTITAS ==================
+entity packages {
+  *id : int
+  --
+  name : string
+  price : decimal
+  speed : string
+  description : text
+  status : enum
+  timestamps : timestamp
+}
+
+entity users {
+  *id : int
+  --
+  name : string
+  email : string
+  password : string
+  phone : string
+  address : text
+  due_date : date
+  status : enum
+  timestamps : timestamp
+}
+
+entity user_packages {
+  *id : int
+  --
+  user_id : FK
+  package_id : FK
+  package_name_snapshot : string
+  package_price_snapshot : decimal
+  package_speed_snapshot : string
+  package_description_snapshot : text
+  active_discount_amount : decimal
+  active_discount_reason : string
+  active_discount_duration : int
+  timestamps : timestamp
+}
+
+entity user_bills {
+  *id : int
+  --
+  user_id : FK
+  billing_month : string
+  amount : decimal
+  discount_amount : decimal
+  discount_reason : string
+  status : enum
+  payment_method : string
+  transfer_date : datetime
+  transfer_proof : string
+  paid_at : datetime
+  invoice_number : string
+  timestamps : timestamp
+}
+
+entity bills_items {
+  *id : int
+  --
+  user_bill_id : FK
+  billed_package_name : string
+  billed_package_price : decimal
+  billed_package_speed : string
+  billed_package_description : text
+  package_discount_amount : decimal
+  package_discount_reason : string
+  timestamps : timestamp
+}
+
+entity incomes {
+  *id : int
+  --
+  user_bill_id : FK
+  date : date
+  amount : decimal
+  description : string
+  timestamps : timestamp
+}
+
+entity expenses {
+  *id : int
+  --
+  date : date
+  amount : decimal
+  description : string
+  timestamps : timestamp
+}
+
+entity tickets {
+  *id : int
+  --
+  user_id : FK
+  subject : string
+  description : text
+  status : enum
+  timestamps : timestamp
+}
+
+entity ticket_replies {
+  *id : int
+  --
+  ticket_id : FK
+  user_id : FK
+  message : text
+  attachment : string
+  timestamps : timestamp
+}
+
+' ================== RELASI ==================
+users ||--o{ user_packages : memiliki
+packages ||--o{ user_packages : terdiri dari
+
+users ||--o{ user_bills : memiliki
+user_bills ||--o{ bills_items : terdiri dari
+user_bills ||--o{ incomes : menghasilkan
+
+users ||--o{ tickets : membuat
+tickets ||--o{ ticket_replies : memiliki
+users ||--o{ ticket_replies : membalas
+
+users ||--o{ expenses : mencatat
+
+@enduml
