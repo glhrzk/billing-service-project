@@ -6,7 +6,7 @@ skinparam classFontSize 12
 
 ' === USER DAN LANGGANAN ===
 class User {
-  - id: int
+  - user_id: int
   - name: varchar
   - email: varchar
   - email_verified_at: datetime
@@ -24,7 +24,7 @@ class User {
 }
 
 class Package {
-  - id: int
+  - id: package_id
   - name: varchar
   - price: decimal
   - speed: varchar
@@ -40,7 +40,7 @@ class Package {
 }
 
 class UserPackage {
-  - id: int
+  - user_package_id: int
   - user_id: int
   - package_id: int
   - start_date: date
@@ -56,7 +56,7 @@ class UserPackage {
 
 ' === PENAGIHAN DAN PEMBAYARAN ===
 class UserBill {
-  - id: int
+  - user_bill_id: int
   - user_id: int
   - billing_date: date
   - total_amount: decimal
@@ -71,7 +71,7 @@ class UserBill {
 }
 
 class BillItem {
-  - id: int
+  - bill_item_id: int
   - user_bill_id: int
   - name: varchar
   - amount: decimal
@@ -85,7 +85,7 @@ class BillItem {
 }
 
 class Income {
-  - id: int
+  - income_id: int
   - user_id: int
   - user_bill_id: int
   - payment_method: varchar
@@ -99,7 +99,7 @@ class Income {
 }
 
 class Expense {
-  - id: int
+  - expense_id: int
   - user_id: int
   - description: text
   - amount: decimal
@@ -113,7 +113,7 @@ class Expense {
 
 ' === TIKET BANTUAN ===
 class Ticket {
-  - id: int
+  - ticket_id: int
   - user_id: int
   - subject: varchar
   - status: enum
@@ -125,7 +125,7 @@ class Ticket {
 }
 
 class TicketReply {
-  - id: int
+  - ticket_reply_id: int
   - ticket_id: int
   - user_id: int
   - message: text
