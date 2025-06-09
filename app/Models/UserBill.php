@@ -11,15 +11,7 @@ class UserBill extends Model
     /** @use HasFactory<\Database\Factories\UserBillFactory> */
     use HasFactory;
 
-    protected $fillable = [
-        'discount_amount',
-        'discount_reason',
-        'status',
-        'payment_status',
-        'tranfer_date',
-        'transfer_proof',
-        'paid_at'
-    ];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function finalAmount(): Attribute
     {

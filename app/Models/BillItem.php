@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class BillItem extends Model
 {
 
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
     public function FinalAmount(): Attribute
     {
         return Attribute::get(
