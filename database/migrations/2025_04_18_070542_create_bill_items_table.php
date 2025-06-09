@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
 
             $table->foreignId('user_bill_id')->constrained()->onDelete('cascade');
-            $table->foreignId('package_id')->nullable()->constrained()->nullOnDelete();
 
             // Snapshot Information when the bill is created
             $table->string('billed_package_name')->nullable();
