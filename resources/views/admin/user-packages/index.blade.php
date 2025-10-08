@@ -3,48 +3,53 @@
 @section('plugins.Datatables', true)
 
 @section('content_body')
-    <x-adminlte-button class="mb-2 float-right" label="Tambah Langganan" data-toggle="modal"
-                       data-target="#modalAddSubscription" theme="primary"/>
 
     @php
         $heads = [
-            ['label' => '#', 'width' => 1, 'sortable' => false],
+            ['label' => '#', 'width' => 1, 'sortable' => false] ,
             'User',
             'Paket',
-            'Kecepatan',
-            'Harga',
             'Dibuat',
             ['label' => 'Aksi', 'center' => true, 'sortable' => false],
         ];
 
+
         $config = [
             'data' => $userPackages->map(function ($userPackages, $index) {
-                $btnDetail = '<button class="btn btn-xs btn-info mr-1" data-toggle="modal" title="Detail" data-target="#modalDetailSubscription-'.$userPackages->id.'"><i class="fas fa-info-circle"></i></button>';
-                $btnDeactivate = '<form method="POST" class="d-inline"  action="'.route('admin.user-package.deactivate', $userPackages->id).'" onsubmit="return confirm(\'Yakin ingin menghapus langganan ini?\')">'.csrf_field().'<input type="hidden" name="_method" value="PUT"><button type="submit" class="btn btn-xs btn-danger" title="Nonaktifkan"><i class="fas fa-power-off"></i></button></form>';
-
-
+                    $btnDeactivate = '<form method="POST" action="'.route('admin.user-package.deactivate', $userPackages->id).'"
+                                 onsubmit="return confirm(\'Yakin ingin menghapus langganan ini?\')">
+                                 '.csrf_field().'
+                                 <input type="hidden" name="_method" value="PUT">
+                                 <button type="submit" class="btn btn-xs btn-danger" title="Nonaktifkan">
+                                    <i class="fas fa-power-off"></i>
+                                 </button>
+                              </form>';
                 return [
                     $index + 1,
                     $userPackages->user->name,
-                    $userPackages->package_name_snapshot,
-                    $userPackages->package_speed_snapshot,
-                    rupiah_label($userPackages->package_price_snapshot),
+                    $userPackages->package->name,
                     $userPackages->created_at->translatedFormat('d M Y'),
-                    $btnDetail . $btnDeactivate,
+                    $btnDeactivate,
                 ];
             })->toArray(),
             'order' => [[0, 'asc']],
+
         ];
     @endphp
 
     <x-adminlte-datatable id="table3" :heads="$heads" head-theme="dark" :config="$config"
-                          striped hoverable bordered compressed beautify/>
+                          striped hoverable bordered compressed beautify>
+        <x-slot name="buttonsSlot">
+            <x-adminlte-button label="Tambah Langganan" data-toggle="modal" data-target="#modalAddSubscription"
+                               theme="primary" icon="fas fa-plus"/>
+        </x-slot>
+    </x-adminlte-datatable>
 
     {{-- MODAL TAMBAH LANGGANAN --}}
     <form action="{{ route('admin.user-package.store') }}" method="POST">
+
         <x-adminlte-modal id="modalAddSubscription" title="Tambah Langganan Baru" theme="primary" size="xl">
             @csrf
-
             <div class="form-group">
                 <label for="user_id">Pilih User</label>
                 <select class="form-control" name="user_id" required>
@@ -82,37 +87,20 @@
                 </tbody>
             </table>
 
-            {{-- OPSI PROMO DISKON --}}
             <div class="form-group mt-4">
-                <label for="has_discount">Promo Diskon?</label>
-                <select class="form-control" id="has_discount" name="has_discount">
-                    <option value="no" selected>Tidak</option>
-                    <option value="yes">Ya</option>
-                </select>
+                <label for="discount_amount">Diskon (Rp)</label>
+                <input type="number" class="form-control" name="discount_amount" id="discount_amount" value="0" min="0">
             </div>
 
-            <div id="discount-section" class="d-none">
-                <div class="form-group">
-                    <label for="active_discount_amount">Jumlah Diskon (Rp)</label>
-                    <input type="number" class="form-control" name="active_discount_amount"
-                           id="active_discount_amount" min="0">
-                </div>
+            <div class="form-group">
+                <label for="discount_reason">Alasan Diskon</label>
+                <input type="text" class="form-control" name="discount_reason"
+                       placeholder="Opsional (misal: promo awal)">
+            </div>
 
-                <div class="form-group">
-                    <label for="active_discount_duration">Durasi Diskon (bulan)</label>
-                    <input type="number" class="form-control" name="active_discount_duration"
-                           id="active_discount_duration" min="1" >
-                </div>
-
-                <div class="form-group">
-                    <label for="active_discount_reason">Alasan Promo</label>
-                    <input type="text" class="form-control" name="active_discount_reason"
-                           placeholder="Contoh: Promo Idul Fitri">
-                </div>
-                <div class="form-group">
-                    <label for="final_discounted_total">Total Setelah Diskon</label>
-                    <input type="text" class="form-control" id="final_discounted_total" readonly>
-                </div>
+            <div class="form-group">
+                <label for="final_amount">Total Setelah Diskon</label>
+                <input type="text" class="form-control" id="final_amount" readonly>
             </div>
 
             <x-slot name="footerSlot">
@@ -121,98 +109,33 @@
             </x-slot>
         </x-adminlte-modal>
     </form>
-
-    @foreach($userPackages as $subscription)
-        <x-adminlte-modal id="modalDetailSubscription-{{ $subscription->id }}" title="Detail Langganan"
-                          theme="info" size="lg" icon="fas fa-info-circle">
-            <dl class="row mb-0">
-                <dt class="col-sm-3">User</dt>
-                <dd class="col-sm-8">{{ $subscription->user->name }}</dd>
-
-                <dt class="col-sm-3">Nama Paket</dt>
-                <dd class="col-sm-8">{{ $subscription->package_name_snapshot }}</dd>
-
-                <dt class="col-sm-3">Kecepatan</dt>
-                <dd class="col-sm-8">{{ $subscription->package_speed_snapshot }}</dd>
-
-                <dt class="col-sm-3">Harga</dt>
-                <dd class="col-sm-8">{{ rupiah_label($subscription->package_price_snapshot) }}</dd>
-
-                <dt class="col-sm-3">Deskripsi</dt>
-                <dd class="col-sm-8">{{ $subscription->package_description_snapshot	 }}</dd>
-
-                <dt class="col-sm-3">Status</dt>
-                <dd class="col-sm-8">
-                <span class="badge badge-{{ $subscription->is_active === 'active' ? 'success' : 'secondary' }}">
-                    {{ ucfirst($subscription->is_active) }}
-                </span>
-                </dd>
-
-                @if($subscription->active_discount_amount > 0)
-                    <dt class="col-sm-3">Diskon Awal</dt>
-                    <dd class="col-sm-8">{{ rupiah_label($subscription->active_discount_amount) }}</dd>
-
-                    <dt class="col-sm-3">Alasan Diskon</dt>
-                    <dd class="col-sm-8">{{ $subscription->active_discount_reason }}</dd>
-
-                    <dt class="col-sm-3">Durasi Diskon</dt>
-                    <dd class="col-sm-8">{{ $subscription->active_discount_duration }} bulan</dd>
-                @endif
-
-                <dt class="col-sm-3">Dibuat Pada</dt>
-                <dd class="col-sm-8">{{ $subscription->created_at->translatedFormat('d M Y H:i') }}</dd>
-            </dl>
-        </x-adminlte-modal>
-    @endforeach
-
 @stop
 
 @push('js')
     <script>
+        function rupiah(value) {
+            return new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(value);
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
-            const hasDiscount = document.getElementById('has_discount');
-            const discountSection = document.getElementById('discount-section');
             const radios = document.querySelectorAll('input[name="package_id"]');
-            const discountInput = document.getElementById('active_discount_amount');
-            const finalTotalDisplay = document.getElementById('final_discounted_total');
+            const discountInput = document.getElementById('discount_amount');
+            const finalAmountDisplay = document.getElementById('final_amount');
 
-            function rupiah(value) {
-                return new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(value);
-            }
-
-            function updateFinalTotal() {
+            function updateFinal() {
                 let price = 0;
                 radios.forEach(radio => {
-                    if (radio.checked) {
-                        price = parseInt(radio.dataset.price || 0);
-                    }
+                    if (radio.checked) price = parseInt(radio.dataset.price || 0);
                 });
-
                 const discount = parseInt(discountInput.value || 0);
-                const final = Math.max(0, price - discount);
-
-                finalTotalDisplay.value = rupiah(final);
+                const total = Math.max(0, price - discount);
+                finalAmountDisplay.value = rupiah(total);
             }
 
-            hasDiscount.addEventListener('change', function () {
-                if (this.value === 'yes') {
-                    discountSection.classList.remove('d-none');
-                    updateFinalTotal();
-                } else {
-                    discountSection.classList.add('d-none');
-                    finalTotalDisplay.value = '';
-                }
-            });
-
-            radios.forEach(radio => radio.addEventListener('change', updateFinalTotal));
-            discountInput.addEventListener('input', updateFinalTotal);
-
-            // Reset saat modal ditutup
-            $('#modalAddSubscription').on('hidden.bs.modal', function () {
-                hasDiscount.value = 'no';
-                discountSection.classList.add('d-none');
-                finalTotalDisplay.value = '';
-            });
+            radios.forEach(radio => radio.addEventListener('change', updateFinal));
+            discountInput.addEventListener('input', updateFinal);
         });
     </script>
 @endpush
+
+
